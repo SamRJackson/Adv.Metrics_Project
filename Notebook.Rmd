@@ -48,4 +48,34 @@ explanatory_variables <- c("population","PopDens","householdsize","PctFam2Par","
 ```
 
 # Figuring out which variables to keep. We have 15 currently, need at most 10 in my opinion. 
+First step: look at a correlation matrix
+Second step : Very arbitrary approach but going to run 2 regressions. One on the sample of 1913 observations but without including police data variables. One with 302 observations with the police data. They see which variables stay significant accross the two, check consistency of coeffs signs, etc. Should give a nice first look. 
+```{r}
+# CORRELATION TABLES
+corr <- cor(concat_wi_na %>% dplyr::select(where(is.numeric)))
+corr2 <- cor(concat_wo_na %>% dplyr::select(where(is.numeric)))
+round(corr,2)
+round(corr2,2)
+
+# REGRESSTIONS
+lm_Violent_wo_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy + PolicPerPop + PolicBudgPerPop,data = concat_wo_na)
+
+
+lm_Violent_wi_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wo_na)
+
+summary(lm_Violent_wo_na)
+
+summary(lm_Violent_wi_na)
+```
+*Signicant in sample with police data* : PctFam2Par, racepctblack, racePctHisp, pctWInvInv, PctNotHSGrad, PctEmploy, PolicPerPop, PolicBudgPerPop
+
+*Signicant in sample without police data* : PctFam2Par, racepctblack, racePctHisp, pctWInvInc, PctNotHSGrad. 
+
+*Overlap* : PctFam2Par, racepctblack, racePctHisp, PctWInvInc and PctNotHSGrad. I think we should keep these no matter what. 
+
+
+
+
+
+
 
