@@ -1,0 +1,51 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or 
+
+# Packages
+_uncomment the first line if the chunk doesn't run_
+```{r}
+#install.packages("ggplot2")
+library(readxl)
+library(dplyr)
+library(ggplot2)
+```
+
+# Set your working directory
+I will use my output as an example of how this is useful:
+
+1. getwd() returns your current working directory, assumed to be where you want to work on the project. i.e *"C:/Users/Sam/Desktop/R_project"*
+2. setwd("C:/Users/Sam/Desktop/R_project") sets the working directory
+3. Now imagine I am generating graphs and want to save them to a subfolder within my project folder. I create a subfolder named graphs and then type setwd
+
+# Load in the dataset
+```{r}
+load("C:/Users/Sam/Desktop/R_project/Data/CrimeData.RData")
+```
+
+# Variable of interest selection.
+We start by keeping a wide selection of potential explanatory variables. Choice of variables was based on model specifications in the existing literature around crime. 
+```{r}
+variables_chosen <- c("communityname:","state:","population:","PopDens:","householdsize:","PctFam2Par:","racepctblack:","racePctHisp:","agePct16t24:","perCapInc:","pctWSocSec:","pctWInvInc:","PctPopUnderPov:","PctNotHSGrad:","PctEmploy:","PolicPerPop:","PolicBudgPerPop:","ViolentCrimesPerPop:","nonViolPerPop:")
+concat_dropped <- concat_test[variables_chosen]
+```
+
+# Cleaning the datatset
+```{r}
+is.data.frame(concat_dropped)#test dataframe ok
+i=c(3:19) #Select variables to turn into numeric
+concat_dropped[ , i] <- apply(concat_dropped[ , i], 2,
+                    function(x) as.numeric(as.character(x)))#convert relevant variables in numeric
+sapply(concat_dropped, class) #check ok
+concat_wo_na= na.omit(concat_dropped)#Drop NA
+concat_wi_na=concat_dropped[!complete.cases(concat_dropped),]#keep NA for statistics on drops
+colnames(concat_wo_na)<-gsub(":","",colnames(concat_wo_na))# remove semicolons from names
+explanatory_variables <- c("population","PopDens","householdsize","PctFam2Par","racepctblack","racePctHisp","agePct16t24","perCapInc","pctWSocSec","pctWInvInc","PctPopUnderPov","PctNotHSGrad","PctEmploy","PolicPerPop","PolicBudgPerPop")
+```
+
+# Figuring out which variables to keep. We have 15 currently, need at most 10 in my opinion. 
+
