@@ -24,7 +24,7 @@ I will use my output as an example of how this is useful:
 
 # Load in the dataset
 ```{r}
-load("C:/Users/Sam/Desktop/R_project/Data/CrimeData.RData")
+load("~/Desktop/M2 2022-2023/Advanced Econometrics/Adv.Metrics_Project-main/Data/CrimeData.RData")
 ```
 
 # Variable of interest selection.
@@ -44,6 +44,7 @@ sapply(concat_dropped, class) #check ok
 concat_wo_na= na.omit(concat_dropped)#Drop NA
 concat_wi_na=concat_dropped[!complete.cases(concat_dropped),]#keep NA for statistics on drops
 colnames(concat_wo_na)<-gsub(":","",colnames(concat_wo_na))# remove semicolons from names
+colnames(concat_wi_na)<-gsub(":","",colnames(concat_wi_na))# remove semicolons from names
 explanatory_variables <- c("population","PopDens","householdsize","PctFam2Par","racepctblack","racePctHisp","agePct16t24","perCapInc","pctWSocSec","pctWInvInc","PctPopUnderPov","PctNotHSGrad","PctEmploy","PolicPerPop","PolicBudgPerPop")
 ```
 
@@ -61,17 +62,60 @@ round(corr2,2)
 lm_Violent_wo_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy + PolicPerPop + PolicBudgPerPop,data = concat_wo_na)
 
 
-lm_Violent_wi_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wo_na)
+lm_Violent_wi_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wi_na)
 
 summary(lm_Violent_wo_na)
 
 summary(lm_Violent_wi_na)
 ```
-*Signicant in sample with police data* : PctFam2Par, racepctblack, racePctHisp, pctWInvInv, PctNotHSGrad, PctEmploy, PolicPerPop, PolicBudgPerPop
+*Signicant in sample with police data* : PctFam2Par, racepctblack, racepctHisp, pctWInvInc, PctNotGradHS, PctEmploy, PolicPerPop, PolicBudgPerPop
 
-*Signicant in sample without police data* : PctFam2Par, racepctblack, racePctHisp, pctWInvInc, PctNotHSGrad. 
+*Signicant in sample without police data* : PopDens, householdsize, PctFam2Par, racepctblack, racePctHisp, agePct16t24, perCapInc, pctWInvInc. 
 
-*Overlap* : PctFam2Par, racepctblack, racePctHisp, PctWInvInc and PctNotHSGrad. I think we should keep these no matter what. 
+*Overlap* : PctFam2PAr, racepctblack, racepctHisp, pctWInvInc
+
+```{r}
+lm_nonviolent_wi_na = lm(nonViolPerPop~ population + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wi_na)
+summary(lm_nonviolent_wi_na)
+
+# Signs don't make sense : PctNotHSGrad negative
+
+lm_nonviolent_wo_na = lm(nonViolPerPop~ population + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy+PolicPerPop + PolicBudgPerPop,data = concat_wo_na)
+summary(lm_nonviolent_wo_na)
+# Signs that don't make sense : PctNotHSGrad negative
+#Perhaphs do not use both policbudgperpop and perCapInc, very likely correlated. 
+
+# Create aggregated crime variable
+concat_wi_na$aggregatedCrime <- concat_wi_na$ViolentCrimesPerPop + concat_wi_na$nonViolPerPop
+concat_wo_na$aggregatedCrime <- concat_wo_na$ViolentCrimesPerPop + concat_wo_na$nonViolPerPop
+
+# Test regressions on aggregated and then seperate to see what's biasing coefficients up/down
+
+lm_aggregated_wi_na = lm(aggregatedCrime~ PopDens + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wi_na)
+summary(lm_aggregated_wi_na)
+
+lm_aggregated_wo_na = lm(aggregatedCrime~ PopDens + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy+ PolicPerPop + PolicBudgPerPop ,data = concat_wo_na)
+summary(lm_aggregated_wo_na)
+```
+*Signicant in sample with police data* : PctFam2Par, racepctblack, racePctHisp, perCapInc, pctWSocSec, pctWIncInv, PctPopUnderPov, PctNotHSGrad, PctEmploy, PolicBudgPerPop, PolicBudgPerPop. 
+Signs that don't make sense : perCapInc positive, PctNotHSGrad negative
+
+*Signicant in sample without police data* : population, PctFam2Par, racepctblack, racePctHisp, perCapInc, pctWSocSec, pctWInvInc, pctPopUnderfPov, pctnotHSGrad, PctEmploy
+Signs that don't make sense : PerCapInc positive, PctNotHSGrad negative, PctEmploy positive, PolicBudgPerPop positive.
+
+
+```{r}
+lm_aggregated_tests = lm(aggregatedCrime~ population + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad+ PolicPerPop ,data = concat_wo_na)
+summary(lm_aggregated_tests)
+
+
+```
+# Model Selection using information criteria 
+```{r}
+lm_aggregated_wi_na = lm(aggregatedCrime~ PopDens + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wi_na)
+
+
+```
 
 
 
