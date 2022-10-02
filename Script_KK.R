@@ -21,8 +21,18 @@ colnames(concat_wo_na)<-gsub(":","",colnames(concat_wo_na))
 explanatory_variables <- c("population","PopDens","householdsize","PctFam2Par","racepctblack","racePctHisp","agePct16t24","perCapInc","pctWSocSec","pctWInvInc","PctPopUnderPov","PctNotHSGrad","PctEmploy","PolicPerPop","PolicBudgPerPop")
 colnames(concat_wo_na)
 
-lm_Violent = lm(ViolentCrimesPerPop~communityname + state + PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy + PolicPerPop + PolicBudgPerPop,data = concat_wo_na)
+lm_Violent = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy + PolicPerPop + PolicBudgPerPop,data = concat_wo_na)
 summary(lm_Violent)
+
+lm_Violent_wi_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wo_na)
+summary(lm_Violent_wi_na)
+
+lm_Violent[1]
+lm_Violent_wi_na[1]
+
+# Statistically significant variables accross the two regressions : 
+# PctFam2PAr, racepctblack, racePctHisp, pctWInvInc,PctNotHSGrad
+
 #1.2.2 outliers?
 
 
