@@ -225,11 +225,12 @@ pre code {
 <p><em>uncomment the first line if the chunk doesn’t run</em></p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2luc3RhbGwucGFja2FnZXMoXCJnZ3Bsb3QyXCIpXG5saWJyYXJ5KHJlYWR4bClcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdncGxvdDIpXG5gYGAifQ== -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuI2luc3RhbGwucGFja2FnZXMoXCJnZ3Bsb3QyXCIpXG5saWJyYXJ5KHJlYWR4bClcbmxpYnJhcnkoZHBseXIpXG5saWJyYXJ5KGdncGxvdDIpXG5saWJyYXJ5KGxlYXBzKVxuYGBgIn0= -->
 <pre class="r"><code>#install.packages(&quot;ggplot2&quot;)
 library(readxl)
 library(dplyr)
-library(ggplot2)</code></pre>
+library(ggplot2)
+library(leaps)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -258,8 +259,9 @@ library(ggplot2)</code></pre>
 <p>We start by keeping a wide selection of potential explanatory variables. Choice of variables was based on model specifications in the existing literature around crime.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFibGVzX2Nob3NlbiA8LSBjKFwiY29tbXVuaXR5bmFtZTpcIixcInN0YXRlOlwiLFwicG9wdWxhdGlvbjpcIixcIlBvcERlbnM6XCIsXCJob3VzZWhvbGRzaXplOlwiLFwiUGN0RmFtMlBhcjpcIixcInJhY2VwY3RibGFjazpcIixcInJhY2VQY3RIaXNwOlwiLFwiYWdlUGN0MTZ0MjQ6XCIsXCJwZXJDYXBJbmM6XCIsXCJwY3RXU29jU2VjOlwiLFwicGN0V0ludkluYzpcIixcIlBjdFBvcFVuZGVyUG92OlwiLFwiUGN0Tm90SFNHcmFkOlwiLFwiUGN0RW1wbG95OlwiLFwiUG9saWNQZXJQb3A6XCIsXCJQb2xpY0J1ZGdQZXJQb3A6XCIsXCJWaW9sZW50Q3JpbWVzUGVyUG9wOlwiLFwibm9uVmlvbFBlclBvcDpcIilcbmNvbmNhdF9kcm9wcGVkIDwtIGNvbmNhdF90ZXN0W3ZhcmlhYmxlc19jaG9zZW5dXG5gYGAifQ== -->
-<pre class="r"><code>variables_chosen &lt;- c(&quot;communityname:&quot;,&quot;state:&quot;,&quot;population:&quot;,&quot;PopDens:&quot;,&quot;householdsize:&quot;,&quot;PctFam2Par:&quot;,&quot;racepctblack:&quot;,&quot;racePctHisp:&quot;,&quot;agePct16t24:&quot;,&quot;perCapInc:&quot;,&quot;pctWSocSec:&quot;,&quot;pctWInvInc:&quot;,&quot;PctPopUnderPov:&quot;,&quot;PctNotHSGrad:&quot;,&quot;PctEmploy:&quot;,&quot;PolicPerPop:&quot;,&quot;PolicBudgPerPop:&quot;,&quot;ViolentCrimesPerPop:&quot;,&quot;nonViolPerPop:&quot;)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudmFyaWFibGVzX2Nob3NlbiA8LSBjKFwiY29tbXVuaXR5bmFtZVwiLFwic3RhdGVcIixcInBvcHVsYXRpb25cIixcIlBvcERlbnNcIixcImhvdXNlaG9sZHNpemVcIixcIlBjdEZhbTJQYXJcIixcInJhY2VwY3RibGFja1wiLFwicmFjZVBjdEhpc3BcIixcImFnZVBjdDE2dDI0XCIsXCJwZXJDYXBJbmNcIixcInBjdFdTb2NTZWNcIixcInBjdFdJbnZJbmNcIixcIlBjdFBvcFVuZGVyUG92XCIsXCJQY3ROb3RIU0dyYWRcIixcIlBjdEVtcGxveVwiLFwiUG9saWNQZXJQb3BcIixcIlBvbGljQnVkZ1BlclBvcFwiLFwiVmlvbGVudENyaW1lc1BlclBvcFwiLFwibm9uVmlvbFBlclBvcFwiKVxuY29sbmFtZXMoY29uY2F0X3Rlc3QpPC1nc3ViKFwiOlwiLFwiXCIsY29sbmFtZXMoY29uY2F0X3Rlc3QpKSMgcmVtb3ZlIHNlbWljb2xvbnMgZnJvbSBuYW1lc1xuY29uY2F0X2Ryb3BwZWQgPC0gY29uY2F0X3Rlc3RbdmFyaWFibGVzX2Nob3Nlbl1cbmBgYCJ9 -->
+<pre class="r"><code>variables_chosen &lt;- c(&quot;communityname&quot;,&quot;state&quot;,&quot;population&quot;,&quot;PopDens&quot;,&quot;householdsize&quot;,&quot;PctFam2Par&quot;,&quot;racepctblack&quot;,&quot;racePctHisp&quot;,&quot;agePct16t24&quot;,&quot;perCapInc&quot;,&quot;pctWSocSec&quot;,&quot;pctWInvInc&quot;,&quot;PctPopUnderPov&quot;,&quot;PctNotHSGrad&quot;,&quot;PctEmploy&quot;,&quot;PolicPerPop&quot;,&quot;PolicBudgPerPop&quot;,&quot;ViolentCrimesPerPop&quot;,&quot;nonViolPerPop&quot;)
+colnames(concat_test)&lt;-gsub(&quot;:&quot;,&quot;&quot;,colnames(concat_test))# remove semicolons from names
 concat_dropped &lt;- concat_test[variables_chosen]</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
@@ -269,43 +271,14 @@ concat_dropped &lt;- concat_test[variables_chosen]</code></pre>
 <h1>Cleaning the datatset</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaXMuZGF0YS5mcmFtZShjb25jYXRfZHJvcHBlZCkjdGVzdCBkYXRhZnJhbWUgb2tcbmBgYCJ9 -->
-<pre class="r"><code>is.data.frame(concat_dropped)#test dataframe ok</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiWzFdIFRSVUVcbiJ9 -->
-<pre><code>[1] TRUE</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaT1jKDM6MTkpICNTZWxlY3QgdmFyaWFibGVzIHRvIHR1cm4gaW50byBudW1lcmljXG5jb25jYXRfZHJvcHBlZFsgLCBpXSA8LSBhcHBseShjb25jYXRfZHJvcHBlZFsgLCBpXSwgMixcbiAgICAgICAgICAgICAgICAgICAgZnVuY3Rpb24oeCkgYXMubnVtZXJpYyhhcy5jaGFyYWN0ZXIoeCkpKSNjb252ZXJ0IHJlbGV2YW50IHZhcmlhYmxlcyBpbiBudW1lcmljXG5gYGAifQ== -->
-<pre class="r"><code>i=c(3:19) #Select variables to turn into numeric
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaXMuZGF0YS5mcmFtZShjb25jYXRfZHJvcHBlZCkjdGVzdCBkYXRhZnJhbWUgb2tcbmk9YygzOjE5KSAjU2VsZWN0IHZhcmlhYmxlcyB0byB0dXJuIGludG8gbnVtZXJpY1xuY29uY2F0X2Ryb3BwZWRbICwgaV0gPC0gYXBwbHkoY29uY2F0X2Ryb3BwZWRbICwgaV0sIDIsXG4gICAgICAgICAgICAgICAgICAgIGZ1bmN0aW9uKHgpIGFzLm51bWVyaWMoYXMuY2hhcmFjdGVyKHgpKSkjY29udmVydCByZWxldmFudCB2YXJpYWJsZXMgaW4gbnVtZXJpY1xuc2FwcGx5KGNvbmNhdF9kcm9wcGVkLCBjbGFzcykgI2NoZWNrIG9rXG5jb25jYXRfd29fbmE9IG5hLm9taXQoY29uY2F0X2Ryb3BwZWQpI0Ryb3AgTkFcbmNvbmNhdF93aV9uYT1jb25jYXRfZHJvcHBlZFshY29tcGxldGUuY2FzZXMoY29uY2F0X2Ryb3BwZWQpLF0ja2VlcCBOQSBmb3Igc3RhdGlzdGljcyBvbiBkcm9wc1xuZXhwbGFuYXRvcnlfdmFyaWFibGVzIDwtIGMoXCJwb3B1bGF0aW9uXCIsXCJQb3BEZW5zXCIsXCJob3VzZWhvbGRzaXplXCIsXCJQY3RGYW0yUGFyXCIsXCJyYWNlcGN0YmxhY2tcIixcInJhY2VQY3RIaXNwXCIsXCJhZ2VQY3QxNnQyNFwiLFwicGVyQ2FwSW5jXCIsXCJwY3RXU29jU2VjXCIsXCJwY3RXSW52SW5jXCIsXCJQY3RQb3BVbmRlclBvdlwiLFwiUGN0Tm90SFNHcmFkXCIsXCJQY3RFbXBsb3lcIixcIlBvbGljUGVyUG9wXCIsXCJQb2xpY0J1ZGdQZXJQb3BcIilcbmBgYCJ9 -->
+<pre class="r"><code>is.data.frame(concat_dropped)#test dataframe ok
+i=c(3:19) #Select variables to turn into numeric
 concat_dropped[ , i] &lt;- apply(concat_dropped[ , i], 2,
-                    function(x) as.numeric(as.character(x)))#convert relevant variables in numeric</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiV2FybmluZyBpbiBGVU4obmV3WFssIGldLCAuLi4pIDogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25cbldhcm5pbmcgaW4gRlVOKG5ld1hbLCBpXSwgLi4uKSA6IE5BcyBpbnRyb2R1Y2VkIGJ5IGNvZXJjaW9uXG5XYXJuaW5nIGluIEZVTihuZXdYWywgaV0sIC4uLikgOiBOQXMgaW50cm9kdWNlZCBieSBjb2VyY2lvblxuV2FybmluZyBpbiBGVU4obmV3WFssIGldLCAuLi4pIDogTkFzIGludHJvZHVjZWQgYnkgY29lcmNpb25cbiJ9 -->
-<pre><code>Warning in FUN(newX[, i], ...) : NAs introduced by coercion
-Warning in FUN(newX[, i], ...) : NAs introduced by coercion
-Warning in FUN(newX[, i], ...) : NAs introduced by coercion
-Warning in FUN(newX[, i], ...) : NAs introduced by coercion</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc2FwcGx5KGNvbmNhdF9kcm9wcGVkLCBjbGFzcykgI2NoZWNrIG9rXG5gYGAifQ== -->
-<pre class="r"><code>sapply(concat_dropped, class) #check ok</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgY29tbXVuaXR5bmFtZTogICAgICAgICAgICAgICBzdGF0ZTogICAgICAgICAgcG9wdWxhdGlvbjogICAgICAgICAgICAgUG9wRGVuczogXG4gICAgICAgICBcImNoYXJhY3RlclwiICAgICAgICAgIFwiY2hhcmFjdGVyXCIgICAgICAgICAgICBcIm51bWVyaWNcIiAgICAgICAgICAgIFwibnVtZXJpY1wiIFxuICAgICAgaG91c2Vob2xkc2l6ZTogICAgICAgICAgUGN0RmFtMlBhcjogICAgICAgIHJhY2VwY3RibGFjazogICAgICAgICByYWNlUGN0SGlzcDogXG4gICAgICAgICAgIFwibnVtZXJpY1wiICAgICAgICAgICAgXCJudW1lcmljXCIgICAgICAgICAgICBcIm51bWVyaWNcIiAgICAgICAgICAgIFwibnVtZXJpY1wiIFxuICAgICAgICBhZ2VQY3QxNnQyNDogICAgICAgICAgIHBlckNhcEluYzogICAgICAgICAgcGN0V1NvY1NlYzogICAgICAgICAgcGN0V0ludkluYzogXG4gICAgICAgICAgIFwibnVtZXJpY1wiICAgICAgICAgICAgXCJudW1lcmljXCIgICAgICAgICAgICBcIm51bWVyaWNcIiAgICAgICAgICAgIFwibnVtZXJpY1wiIFxuICAgICBQY3RQb3BVbmRlclBvdjogICAgICAgIFBjdE5vdEhTR3JhZDogICAgICAgICAgIFBjdEVtcGxveTogICAgICAgICBQb2xpY1BlclBvcDogXG4gICAgICAgICAgIFwibnVtZXJpY1wiICAgICAgICAgICAgXCJudW1lcmljXCIgICAgICAgICAgICBcIm51bWVyaWNcIiAgICAgICAgICAgIFwibnVtZXJpY1wiIFxuICAgIFBvbGljQnVkZ1BlclBvcDogVmlvbGVudENyaW1lc1BlclBvcDogICAgICAgbm9uVmlvbFBlclBvcDogXG4gICAgICAgICAgIFwibnVtZXJpY1wiICAgICAgICAgICAgXCJudW1lcmljXCIgICAgICAgICAgICBcIm51bWVyaWNcIiBcbiJ9 -->
-<pre><code>      communityname:               state:          population:             PopDens: 
-         &quot;character&quot;          &quot;character&quot;            &quot;numeric&quot;            &quot;numeric&quot; 
-      householdsize:          PctFam2Par:        racepctblack:         racePctHisp: 
-           &quot;numeric&quot;            &quot;numeric&quot;            &quot;numeric&quot;            &quot;numeric&quot; 
-        agePct16t24:           perCapInc:          pctWSocSec:          pctWInvInc: 
-           &quot;numeric&quot;            &quot;numeric&quot;            &quot;numeric&quot;            &quot;numeric&quot; 
-     PctPopUnderPov:        PctNotHSGrad:           PctEmploy:         PolicPerPop: 
-           &quot;numeric&quot;            &quot;numeric&quot;            &quot;numeric&quot;            &quot;numeric&quot; 
-    PolicBudgPerPop: ViolentCrimesPerPop:       nonViolPerPop: 
-           &quot;numeric&quot;            &quot;numeric&quot;            &quot;numeric&quot; </code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuY29uY2F0X3dvX25hPSBuYS5vbWl0KGNvbmNhdF9kcm9wcGVkKSNEcm9wIE5BXG5jb25jYXRfd2lfbmE9Y29uY2F0X2Ryb3BwZWRbIWNvbXBsZXRlLmNhc2VzKGNvbmNhdF9kcm9wcGVkKSxdI2tlZXAgTkEgZm9yIHN0YXRpc3RpY3Mgb24gZHJvcHNcbmNvbG5hbWVzKGNvbmNhdF93b19uYSk8LWdzdWIoXCI6XCIsXCJcIixjb2xuYW1lcyhjb25jYXRfd29fbmEpKSMgcmVtb3ZlIHNlbWljb2xvbnMgZnJvbSBuYW1lc1xuY29sbmFtZXMoY29uY2F0X3dpX25hKTwtZ3N1YihcIjpcIixcIlwiLGNvbG5hbWVzKGNvbmNhdF93aV9uYSkpIyByZW1vdmUgc2VtaWNvbG9ucyBmcm9tIG5hbWVzXG5leHBsYW5hdG9yeV92YXJpYWJsZXMgPC0gYyhcInBvcHVsYXRpb25cIixcIlBvcERlbnNcIixcImhvdXNlaG9sZHNpemVcIixcIlBjdEZhbTJQYXJcIixcInJhY2VwY3RibGFja1wiLFwicmFjZVBjdEhpc3BcIixcImFnZVBjdDE2dDI0XCIsXCJwZXJDYXBJbmNcIixcInBjdFdTb2NTZWNcIixcInBjdFdJbnZJbmNcIixcIlBjdFBvcFVuZGVyUG92XCIsXCJQY3ROb3RIU0dyYWRcIixcIlBjdEVtcGxveVwiLFwiUG9saWNQZXJQb3BcIixcIlBvbGljQnVkZ1BlclBvcFwiKVxuYGBgIn0= -->
-<pre class="r"><code>concat_wo_na= na.omit(concat_dropped)#Drop NA
+                    function(x) as.numeric(as.character(x)))#convert relevant variables in numeric
+sapply(concat_dropped, class) #check ok
+concat_wo_na= na.omit(concat_dropped)#Drop NA
 concat_wi_na=concat_dropped[!complete.cases(concat_dropped),]#keep NA for statistics on drops
-colnames(concat_wo_na)&lt;-gsub(&quot;:&quot;,&quot;&quot;,colnames(concat_wo_na))# remove semicolons from names
-colnames(concat_wi_na)&lt;-gsub(&quot;:&quot;,&quot;&quot;,colnames(concat_wi_na))# remove semicolons from names
 explanatory_variables &lt;- c(&quot;population&quot;,&quot;PopDens&quot;,&quot;householdsize&quot;,&quot;PctFam2Par&quot;,&quot;racepctblack&quot;,&quot;racePctHisp&quot;,&quot;agePct16t24&quot;,&quot;perCapInc&quot;,&quot;pctWSocSec&quot;,&quot;pctWInvInc&quot;,&quot;PctPopUnderPov&quot;,&quot;PctNotHSGrad&quot;,&quot;PctEmploy&quot;,&quot;PolicPerPop&quot;,&quot;PolicBudgPerPop&quot;)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
@@ -316,210 +289,23 @@ explanatory_variables &lt;- c(&quot;population&quot;,&quot;PopDens&quot;,&quot;h
 <p>First step: look at a correlation matrix Second step : Very arbitrary approach but going to run 2 regressions. One on the sample of 1913 observations but without including police data variables. One with 302 observations with the police data. They see which variables stay significant accross the two, check consistency of coeffs signs, etc. Should give a nice first look.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDT1JSRUxBVElPTiBUQUJMRVNcbmNvcnIgPC0gY29yKGNvbmNhdF93aV9uYSAlPiUgZHBseXI6OnNlbGVjdCh3aGVyZShpcy5udW1lcmljKSkpXG5jb3JyMiA8LSBjb3IoY29uY2F0X3dvX25hICU+JSBkcGx5cjo6c2VsZWN0KHdoZXJlKGlzLm51bWVyaWMpKSlcbnJvdW5kKGNvcnIsMilcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBDT1JSRUxBVElPTiBUQUJMRVNcbmNvcnIgPC0gY29yKGNvbmNhdF93aV9uYSAlPiUgZHBseXI6OnNlbGVjdCh3aGVyZShpcy5udW1lcmljKSkpXG5jb3JyMiA8LSBjb3IoY29uY2F0X3dvX25hICU+JSBkcGx5cjo6c2VsZWN0KHdoZXJlKGlzLm51bWVyaWMpKSlcbiNyb3VuZChjb3JyLDIpXG4jcm91bmQoY29ycjIsMilcblxuIyBSRUdSRVNTVElPTlNcbmxtX1Zpb2xlbnRfd29fbmEgPSBsbShWaW9sZW50Q3JpbWVzUGVyUG9wfiBQb3BEZW5zICsgaG91c2Vob2xkc2l6ZSArIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIGFnZVBjdDE2dDI0ICsgcGVyQ2FwSW5jICsgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCArIFBjdEVtcGxveSArIFBvbGljUGVyUG9wICsgUG9saWNCdWRnUGVyUG9wLGRhdGEgPSBjb25jYXRfd29fbmEpXG5cblxubG1fVmlvbGVudF93aV9uYSA9IGxtKFZpb2xlbnRDcmltZXNQZXJQb3B+IFBvcERlbnMgKyBob3VzZWhvbGRzaXplICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIHJhY2VQY3RIaXNwICsgYWdlUGN0MTZ0MjQgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95LGRhdGEgPSBjb25jYXRfd2lfbmEpXG5cbiNzdW1tYXJ5KGxtX1Zpb2xlbnRfd29fbmEpXG5cbiNzdW1tYXJ5KGxtX1Zpb2xlbnRfd2lfbmEpXG5gYGAifQ== -->
 <pre class="r"><code># CORRELATION TABLES
 corr &lt;- cor(concat_wi_na %&gt;% dplyr::select(where(is.numeric)))
 corr2 &lt;- cor(concat_wo_na %&gt;% dplyr::select(where(is.numeric)))
-round(corr,2)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICAgICAgICBwb3B1bGF0aW9uIFBvcERlbnMgaG91c2Vob2xkc2l6ZSBQY3RGYW0yUGFyIHJhY2VwY3RibGFjayByYWNlUGN0SGlzcFxucG9wdWxhdGlvbiAgICAgICAgICAgICAgICAxLjAwICAgIDAuMTYgICAgICAgICAgMC4wMCAgICAgIC0wLjExICAgICAgICAgMC4xMiAgICAgICAgMC4wNlxuUG9wRGVucyAgICAgICAgICAgICAgICAgICAwLjE2ICAgIDEuMDAgICAgICAgICAgMC4wMyAgICAgIC0wLjE4ICAgICAgICAgMC4wNSAgICAgICAgMC4zM1xuaG91c2Vob2xkc2l6ZSAgICAgICAgICAgICAwLjAwICAgIDAuMDMgICAgICAgICAgMS4wMCAgICAgICAwLjI1ICAgICAgICAtMC4wNCAgICAgICAgMC40OVxuUGN0RmFtMlBhciAgICAgICAgICAgICAgIC0wLjExICAgLTAuMTggICAgICAgICAgMC4yNSAgICAgICAxLjAwICAgICAgICAtMC42OCAgICAgICAtMC4xMVxucmFjZXBjdGJsYWNrICAgICAgICAgICAgICAwLjEyICAgIDAuMDUgICAgICAgICAtMC4wNCAgICAgIC0wLjY4ICAgICAgICAgMS4wMCAgICAgICAtMC4wOFxucmFjZVBjdEhpc3AgICAgICAgICAgICAgICAwLjA2ICAgIDAuMzMgICAgICAgICAgMC40OSAgICAgIC0wLjExICAgICAgICAtMC4wOCAgICAgICAgMS4wMFxuYWdlUGN0MTZ0MjQgICAgICAgICAgICAgICAwLjAyICAgIDAuMDMgICAgICAgICAgMC4zMyAgICAgIC0wLjE5ICAgICAgICAgMC4wOCAgICAgICAgMC4wNVxucGVyQ2FwSW5jICAgICAgICAgICAgICAgIC0wLjAyICAgIDAuMDIgICAgICAgICAtMC4xMCAgICAgICAwLjU4ICAgICAgICAtMC4yNyAgICAgICAtMC4yM1xucGN0V1NvY1NlYyAgICAgICAgICAgICAgIC0wLjA2ICAgIDAuMDAgICAgICAgICAtMC40NSAgICAgIC0wLjM3ICAgICAgICAgMC4xMyAgICAgICAtMC4xMFxucGN0V0ludkluYyAgICAgICAgICAgICAgIC0wLjA2ICAgLTAuMDggICAgICAgICAtMC4xNSAgICAgICAwLjcyICAgICAgICAtMC40OCAgICAgICAtMC40MVxuUGN0UG9wVW5kZXJQb3YgICAgICAgICAgICAwLjA3ICAgIDAuMDQgICAgICAgICAgMC4wOCAgICAgIC0wLjc1ICAgICAgICAgMC40OCAgICAgICAgMC4zM1xuUGN0Tm90SFNHcmFkICAgICAgICAgICAgICAwLjAzICAgIDAuMTYgICAgICAgICAgMC4wOSAgICAgIC0wLjYzICAgICAgICAgMC4zNiAgICAgICAgMC40OVxuUGN0RW1wbG95ICAgICAgICAgICAgICAgIC0wLjAxICAgLTAuMDIgICAgICAgICAgMC4xMCAgICAgICAwLjU4ICAgICAgICAtMC4zMCAgICAgICAtMC4xN1xuUG9saWNQZXJQb3AgICAgICAgICAgICAgICAgIE5BICAgICAgTkEgICAgICAgICAgICBOQSAgICAgICAgIE5BICAgICAgICAgICBOQSAgICAgICAgICBOQVxuUG9saWNCdWRnUGVyUG9wICAgICAgICAgICAgIE5BICAgICAgTkEgICAgICAgICAgICBOQSAgICAgICAgIE5BICAgICAgICAgICBOQSAgICAgICAgICBOQVxuVmlvbGVudENyaW1lc1BlclBvcCAgICAgICAgIE5BICAgICAgTkEgICAgICAgICAgICBOQSAgICAgICAgIE5BICAgICAgICAgICBOQSAgICAgICAgICBOQVxubm9uVmlvbFBlclBvcCAgICAgICAgICAgICAgIE5BICAgICAgTkEgICAgICAgICAgICBOQSAgICAgICAgIE5BICAgICAgICAgICBOQSAgICAgICAgICBOQVxuICAgICAgICAgICAgICAgICAgICBhZ2VQY3QxNnQyNCBwZXJDYXBJbmMgcGN0V1NvY1NlYyBwY3RXSW52SW5jIFBjdFBvcFVuZGVyUG92IFBjdE5vdEhTR3JhZFxucG9wdWxhdGlvbiAgICAgICAgICAgICAgICAgMC4wMiAgICAgLTAuMDIgICAgICAtMC4wNiAgICAgIC0wLjA2ICAgICAgICAgICAwLjA3ICAgICAgICAgMC4wM1xuUG9wRGVucyAgICAgICAgICAgICAgICAgICAgMC4wMyAgICAgIDAuMDIgICAgICAgMC4wMCAgICAgIC0wLjA4ICAgICAgICAgICAwLjA0ICAgICAgICAgMC4xNlxuaG91c2Vob2xkc2l6ZSAgICAgICAgICAgICAgMC4zMyAgICAgLTAuMTAgICAgICAtMC40NSAgICAgIC0wLjE1ICAgICAgICAgICAwLjA4ICAgICAgICAgMC4wOVxuUGN0RmFtMlBhciAgICAgICAgICAgICAgICAtMC4xOSAgICAgIDAuNTggICAgICAtMC4zNyAgICAgICAwLjcyICAgICAgICAgIC0wLjc1ICAgICAgICAtMC42M1xucmFjZXBjdGJsYWNrICAgICAgICAgICAgICAgMC4wOCAgICAgLTAuMjcgICAgICAgMC4xMyAgICAgIC0wLjQ4ICAgICAgICAgICAwLjQ4ICAgICAgICAgMC4zNlxucmFjZVBjdEhpc3AgICAgICAgICAgICAgICAgMC4wNSAgICAgLTAuMjMgICAgICAtMC4xMCAgICAgIC0wLjQxICAgICAgICAgICAwLjMzICAgICAgICAgMC40OVxuYWdlUGN0MTZ0MjQgICAgICAgICAgICAgICAgMS4wMCAgICAgLTAuMjkgICAgICAtMC4yMCAgICAgIC0wLjE0ICAgICAgICAgICAwLjQ4ICAgICAgICAgMC4wMVxucGVyQ2FwSW5jICAgICAgICAgICAgICAgICAtMC4yOSAgICAgIDEuMDAgICAgICAtMC4yMyAgICAgICAwLjc4ICAgICAgICAgIC0wLjY0ICAgICAgICAtMC42NlxucGN0V1NvY1NlYyAgICAgICAgICAgICAgICAtMC4yMCAgICAgLTAuMjMgICAgICAgMS4wMCAgICAgIC0wLjExICAgICAgICAgICAwLjI3ICAgICAgICAgMC40N1xucGN0V0ludkluYyAgICAgICAgICAgICAgICAtMC4xNCAgICAgIDAuNzggICAgICAtMC4xMSAgICAgICAxLjAwICAgICAgICAgIC0wLjcwICAgICAgICAtMC43OFxuUGN0UG9wVW5kZXJQb3YgICAgICAgICAgICAgMC40OCAgICAgLTAuNjQgICAgICAgMC4yNyAgICAgIC0wLjcwICAgICAgICAgICAxLjAwICAgICAgICAgMC42NlxuUGN0Tm90SFNHcmFkICAgICAgICAgICAgICAgMC4wMSAgICAgLTAuNjYgICAgICAgMC40NyAgICAgIC0wLjc4ICAgICAgICAgICAwLjY2ICAgICAgICAgMS4wMFxuUGN0RW1wbG95ICAgICAgICAgICAgICAgICAtMC4xOSAgICAgIDAuNDMgICAgICAtMC43NSAgICAgICAwLjQyICAgICAgICAgIC0wLjcxICAgICAgICAtMC42MlxuUG9saWNQZXJQb3AgICAgICAgICAgICAgICAgICBOQSAgICAgICAgTkEgICAgICAgICBOQSAgICAgICAgIE5BICAgICAgICAgICAgIE5BICAgICAgICAgICBOQVxuUG9saWNCdWRnUGVyUG9wICAgICAgICAgICAgICBOQSAgICAgICAgTkEgICAgICAgICBOQSAgICAgICAgIE5BICAgICAgICAgICAgIE5BICAgICAgICAgICBOQVxuVmlvbGVudENyaW1lc1BlclBvcCAgICAgICAgICBOQSAgICAgICAgTkEgICAgICAgICBOQSAgICAgICAgIE5BICAgICAgICAgICAgIE5BICAgICAgICAgICBOQVxubm9uVmlvbFBlclBvcCAgICAgICAgICAgICAgICBOQSAgICAgICAgTkEgICAgICAgICBOQSAgICAgICAgIE5BICAgICAgICAgICAgIE5BICAgICAgICAgICBOQVxuICAgICAgICAgICAgICAgICAgICBQY3RFbXBsb3kgUG9saWNQZXJQb3AgUG9saWNCdWRnUGVyUG9wIFZpb2xlbnRDcmltZXNQZXJQb3Agbm9uVmlvbFBlclBvcFxucG9wdWxhdGlvbiAgICAgICAgICAgICAgLTAuMDEgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxuUG9wRGVucyAgICAgICAgICAgICAgICAgLTAuMDIgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxuaG91c2Vob2xkc2l6ZSAgICAgICAgICAgIDAuMTAgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxuUGN0RmFtMlBhciAgICAgICAgICAgICAgIDAuNTggICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxucmFjZXBjdGJsYWNrICAgICAgICAgICAgLTAuMzAgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxucmFjZVBjdEhpc3AgICAgICAgICAgICAgLTAuMTcgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxuYWdlUGN0MTZ0MjQgICAgICAgICAgICAgLTAuMTkgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxucGVyQ2FwSW5jICAgICAgICAgICAgICAgIDAuNDMgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxucGN0V1NvY1NlYyAgICAgICAgICAgICAgLTAuNzUgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxucGN0V0ludkluYyAgICAgICAgICAgICAgIDAuNDIgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxuUGN0UG9wVW5kZXJQb3YgICAgICAgICAgLTAuNzEgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxuUGN0Tm90SFNHcmFkICAgICAgICAgICAgLTAuNjIgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxuUGN0RW1wbG95ICAgICAgICAgICAgICAgIDEuMDAgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxuUG9saWNQZXJQb3AgICAgICAgICAgICAgICAgTkEgICAgICAgICAgIDEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxuUG9saWNCdWRnUGVyUG9wICAgICAgICAgICAgTkEgICAgICAgICAgTkEgICAgICAgICAgICAgICAxICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICBOQVxuVmlvbGVudENyaW1lc1BlclBvcCAgICAgICAgTkEgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgIDEgICAgICAgICAgICBOQVxubm9uVmlvbFBlclBvcCAgICAgICAgICAgICAgTkEgICAgICAgICAgTkEgICAgICAgICAgICAgIE5BICAgICAgICAgICAgICAgICAgTkEgICAgICAgICAgICAgMVxuIn0= -->
-<pre><code>                    population PopDens householdsize PctFam2Par racepctblack racePctHisp
-population                1.00    0.16          0.00      -0.11         0.12        0.06
-PopDens                   0.16    1.00          0.03      -0.18         0.05        0.33
-householdsize             0.00    0.03          1.00       0.25        -0.04        0.49
-PctFam2Par               -0.11   -0.18          0.25       1.00        -0.68       -0.11
-racepctblack              0.12    0.05         -0.04      -0.68         1.00       -0.08
-racePctHisp               0.06    0.33          0.49      -0.11        -0.08        1.00
-agePct16t24               0.02    0.03          0.33      -0.19         0.08        0.05
-perCapInc                -0.02    0.02         -0.10       0.58        -0.27       -0.23
-pctWSocSec               -0.06    0.00         -0.45      -0.37         0.13       -0.10
-pctWInvInc               -0.06   -0.08         -0.15       0.72        -0.48       -0.41
-PctPopUnderPov            0.07    0.04          0.08      -0.75         0.48        0.33
-PctNotHSGrad              0.03    0.16          0.09      -0.63         0.36        0.49
-PctEmploy                -0.01   -0.02          0.10       0.58        -0.30       -0.17
-PolicPerPop                 NA      NA            NA         NA           NA          NA
-PolicBudgPerPop             NA      NA            NA         NA           NA          NA
-ViolentCrimesPerPop         NA      NA            NA         NA           NA          NA
-nonViolPerPop               NA      NA            NA         NA           NA          NA
-                    agePct16t24 perCapInc pctWSocSec pctWInvInc PctPopUnderPov PctNotHSGrad
-population                 0.02     -0.02      -0.06      -0.06           0.07         0.03
-PopDens                    0.03      0.02       0.00      -0.08           0.04         0.16
-householdsize              0.33     -0.10      -0.45      -0.15           0.08         0.09
-PctFam2Par                -0.19      0.58      -0.37       0.72          -0.75        -0.63
-racepctblack               0.08     -0.27       0.13      -0.48           0.48         0.36
-racePctHisp                0.05     -0.23      -0.10      -0.41           0.33         0.49
-agePct16t24                1.00     -0.29      -0.20      -0.14           0.48         0.01
-perCapInc                 -0.29      1.00      -0.23       0.78          -0.64        -0.66
-pctWSocSec                -0.20     -0.23       1.00      -0.11           0.27         0.47
-pctWInvInc                -0.14      0.78      -0.11       1.00          -0.70        -0.78
-PctPopUnderPov             0.48     -0.64       0.27      -0.70           1.00         0.66
-PctNotHSGrad               0.01     -0.66       0.47      -0.78           0.66         1.00
-PctEmploy                 -0.19      0.43      -0.75       0.42          -0.71        -0.62
-PolicPerPop                  NA        NA         NA         NA             NA           NA
-PolicBudgPerPop              NA        NA         NA         NA             NA           NA
-ViolentCrimesPerPop          NA        NA         NA         NA             NA           NA
-nonViolPerPop                NA        NA         NA         NA             NA           NA
-                    PctEmploy PolicPerPop PolicBudgPerPop ViolentCrimesPerPop nonViolPerPop
-population              -0.01          NA              NA                  NA            NA
-PopDens                 -0.02          NA              NA                  NA            NA
-householdsize            0.10          NA              NA                  NA            NA
-PctFam2Par               0.58          NA              NA                  NA            NA
-racepctblack            -0.30          NA              NA                  NA            NA
-racePctHisp             -0.17          NA              NA                  NA            NA
-agePct16t24             -0.19          NA              NA                  NA            NA
-perCapInc                0.43          NA              NA                  NA            NA
-pctWSocSec              -0.75          NA              NA                  NA            NA
-pctWInvInc               0.42          NA              NA                  NA            NA
-PctPopUnderPov          -0.71          NA              NA                  NA            NA
-PctNotHSGrad            -0.62          NA              NA                  NA            NA
-PctEmploy                1.00          NA              NA                  NA            NA
-PolicPerPop                NA           1              NA                  NA            NA
-PolicBudgPerPop            NA          NA               1                  NA            NA
-ViolentCrimesPerPop        NA          NA              NA                   1            NA
-nonViolPerPop              NA          NA              NA                  NA             1</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucm91bmQoY29ycjIsMilcbmBgYCJ9 -->
-<pre class="r"><code>round(corr2,2)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiICAgICAgICAgICAgICAgICAgICBwb3B1bGF0aW9uIFBvcERlbnMgaG91c2Vob2xkc2l6ZSBQY3RGYW0yUGFyIHJhY2VwY3RibGFjayByYWNlUGN0SGlzcFxucG9wdWxhdGlvbiAgICAgICAgICAgICAgICAxLjAwICAgIDAuMjEgICAgICAgICAgMC4wMiAgICAgIC0wLjExICAgICAgICAgMC4wOCAgICAgICAgMC4xMFxuUG9wRGVucyAgICAgICAgICAgICAgICAgICAwLjIxICAgIDEuMDAgICAgICAgICAgMC4xMCAgICAgIC0wLjI1ICAgICAgICAgMC4wNiAgICAgICAgMC40M1xuaG91c2Vob2xkc2l6ZSAgICAgICAgICAgICAwLjAyICAgIDAuMTAgICAgICAgICAgMS4wMCAgICAgICAwLjEwICAgICAgICAgMC4wMyAgICAgICAgMC42MVxuUGN0RmFtMlBhciAgICAgICAgICAgICAgIC0wLjExICAgLTAuMjUgICAgICAgICAgMC4xMCAgICAgICAxLjAwICAgICAgICAtMC43NyAgICAgICAgMC4wMVxucmFjZXBjdGJsYWNrICAgICAgICAgICAgICAwLjA4ICAgIDAuMDYgICAgICAgICAgMC4wMyAgICAgIC0wLjc3ICAgICAgICAgMS4wMCAgICAgICAtMC4yMFxucmFjZVBjdEhpc3AgICAgICAgICAgICAgICAwLjEwICAgIDAuNDMgICAgICAgICAgMC42MSAgICAgICAwLjAxICAgICAgICAtMC4yMCAgICAgICAgMS4wMFxuYWdlUGN0MTZ0MjQgICAgICAgICAgICAgICAwLjAxICAgIDAuMDQgICAgICAgICAgMC4yNSAgICAgIC0wLjI1ICAgICAgICAgMC4xNiAgICAgICAgMC4wOFxucGVyQ2FwSW5jICAgICAgICAgICAgICAgIC0wLjA0ICAgLTAuMDQgICAgICAgICAtMC4zNCAgICAgICAwLjQ4ICAgICAgICAtMC4zMyAgICAgICAtMC4yMFxucGN0V1NvY1NlYyAgICAgICAgICAgICAgIC0wLjEwICAgLTAuMDYgICAgICAgICAtMC4zNSAgICAgIC0wLjIzICAgICAgICAgMC4wOCAgICAgICAtMC4yM1xucGN0V0ludkluYyAgICAgICAgICAgICAgIC0wLjA5ICAgLTAuMTkgICAgICAgICAtMC40MSAgICAgICAwLjY1ICAgICAgICAtMC41OCAgICAgICAtMC4zN1xuUGN0UG9wVW5kZXJQb3YgICAgICAgICAgICAwLjExICAgIDAuMDggICAgICAgICAgMC4yMSAgICAgIC0wLjc0ICAgICAgICAgMC41NSAgICAgICAgMC4yOVxuUGN0Tm90SFNHcmFkICAgICAgICAgICAgICAwLjA3ICAgIDAuMzggICAgICAgICAgMC40NSAgICAgIC0wLjU3ICAgICAgICAgMC4zOCAgICAgICAgMC41MVxuUGN0RW1wbG95ICAgICAgICAgICAgICAgIC0wLjAzICAgLTAuMDMgICAgICAgICAgMC4wMSAgICAgICAwLjU1ICAgICAgICAtMC4zNCAgICAgICAtMC4xMFxuUG9saWNQZXJQb3AgICAgICAgICAgICAgIC0wLjAyICAgIDAuMDIgICAgICAgICAtMC4xOCAgICAgIC0wLjE4ICAgICAgICAgMC4xMyAgICAgICAtMC4xMFxuUG9saWNCdWRnUGVyUG9wICAgICAgICAgIC0wLjAyICAgIDAuMDMgICAgICAgICAtMC4xMSAgICAgIC0wLjExICAgICAgICAgMC4wNiAgICAgICAtMC4wNVxuVmlvbGVudENyaW1lc1BlclBvcCAgICAgICAwLjE4ICAgIDAuMTUgICAgICAgICAgMC4wOCAgICAgIC0wLjcyICAgICAgICAgMC42NyAgICAgICAgMC4xMlxubm9uVmlvbFBlclBvcCAgICAgICAgICAgICAwLjA1ICAgLTAuMDUgICAgICAgICAtMC4xMyAgICAgIC0wLjYwICAgICAgICAgMC40NyAgICAgICAgMC4wN1xuICAgICAgICAgICAgICAgICAgICBhZ2VQY3QxNnQyNCBwZXJDYXBJbmMgcGN0V1NvY1NlYyBwY3RXSW52SW5jIFBjdFBvcFVuZGVyUG92IFBjdE5vdEhTR3JhZFxucG9wdWxhdGlvbiAgICAgICAgICAgICAgICAgMC4wMSAgICAgLTAuMDQgICAgICAtMC4xMCAgICAgIC0wLjA5ICAgICAgICAgICAwLjExICAgICAgICAgMC4wN1xuUG9wRGVucyAgICAgICAgICAgICAgICAgICAgMC4wNCAgICAgLTAuMDQgICAgICAtMC4wNiAgICAgIC0wLjE5ICAgICAgICAgICAwLjA4ICAgICAgICAgMC4zOFxuaG91c2Vob2xkc2l6ZSAgICAgICAgICAgICAgMC4yNSAgICAgLTAuMzQgICAgICAtMC4zNSAgICAgIC0wLjQxICAgICAgICAgICAwLjIxICAgICAgICAgMC40NVxuUGN0RmFtMlBhciAgICAgICAgICAgICAgICAtMC4yNSAgICAgIDAuNDggICAgICAtMC4yMyAgICAgICAwLjY1ICAgICAgICAgIC0wLjc0ICAgICAgICAtMC41N1xucmFjZXBjdGJsYWNrICAgICAgICAgICAgICAgMC4xNiAgICAgLTAuMzMgICAgICAgMC4wOCAgICAgIC0wLjU4ICAgICAgICAgICAwLjU1ICAgICAgICAgMC4zOFxucmFjZVBjdEhpc3AgICAgICAgICAgICAgICAgMC4wOCAgICAgLTAuMjAgICAgICAtMC4yMyAgICAgIC0wLjM3ICAgICAgICAgICAwLjI5ICAgICAgICAgMC41MVxuYWdlUGN0MTZ0MjQgICAgICAgICAgICAgICAgMS4wMCAgICAgLTAuMzMgICAgICAtMC4zMyAgICAgIC0wLjI3ICAgICAgICAgICAwLjM5ICAgICAgICAgMC4xMFxucGVyQ2FwSW5jICAgICAgICAgICAgICAgICAtMC4zMyAgICAgIDEuMDAgICAgICAtMC4wMyAgICAgICAwLjc2ICAgICAgICAgIC0wLjYzICAgICAgICAtMC42MVxucGN0V1NvY1NlYyAgICAgICAgICAgICAgICAtMC4zMyAgICAgLTAuMDMgICAgICAgMS4wMCAgICAgICAwLjA3ICAgICAgICAgICAwLjE0ICAgICAgICAgMC4yOFxucGN0V0ludkluYyAgICAgICAgICAgICAgICAtMC4yNyAgICAgIDAuNzYgICAgICAgMC4wNyAgICAgICAxLjAwICAgICAgICAgIC0wLjc3ICAgICAgICAtMC43NlxuUGN0UG9wVW5kZXJQb3YgICAgICAgICAgICAgMC4zOSAgICAgLTAuNjMgICAgICAgMC4xNCAgICAgIC0wLjc3ICAgICAgICAgICAxLjAwICAgICAgICAgMC42NlxuUGN0Tm90SFNHcmFkICAgICAgICAgICAgICAgMC4xMCAgICAgLTAuNjEgICAgICAgMC4yOCAgICAgIC0wLjc2ICAgICAgICAgICAwLjY2ICAgICAgICAgMS4wMFxuUGN0RW1wbG95ICAgICAgICAgICAgICAgICAgMC4wMSAgICAgIDAuMzUgICAgICAtMC43MyAgICAgICAwLjQwICAgICAgICAgIC0wLjY4ICAgICAgICAtMC41N1xuUG9saWNQZXJQb3AgICAgICAgICAgICAgICAtMC4xNCAgICAgIDAuMTEgICAgICAgMC4zMCAgICAgICAwLjA2ICAgICAgICAgICAwLjAyICAgICAgICAgMC4wM1xuUG9saWNCdWRnUGVyUG9wICAgICAgICAgICAtMC4xMyAgICAgIDAuMTIgICAgICAgMC4xNyAgICAgICAwLjA2ICAgICAgICAgIC0wLjAzICAgICAgICAgMC4wMFxuVmlvbGVudENyaW1lc1BlclBvcCAgICAgICAgMC4xNSAgICAgLTAuMzQgICAgICAgMC4wMyAgICAgIC0wLjU5ICAgICAgICAgICAwLjU5ICAgICAgICAgMC40M1xubm9uVmlvbFBlclBvcCAgICAgICAgICAgICAgMC4yMCAgICAgLTAuMjggICAgICAgMC4wOSAgICAgIC0wLjQ0ICAgICAgICAgICAwLjU5ICAgICAgICAgMC4yNFxuICAgICAgICAgICAgICAgICAgICBQY3RFbXBsb3kgUG9saWNQZXJQb3AgUG9saWNCdWRnUGVyUG9wIFZpb2xlbnRDcmltZXNQZXJQb3Agbm9uVmlvbFBlclBvcFxucG9wdWxhdGlvbiAgICAgICAgICAgICAgLTAuMDMgICAgICAgLTAuMDIgICAgICAgICAgIC0wLjAyICAgICAgICAgICAgICAgIDAuMTggICAgICAgICAgMC4wNVxuUG9wRGVucyAgICAgICAgICAgICAgICAgLTAuMDMgICAgICAgIDAuMDIgICAgICAgICAgICAwLjAzICAgICAgICAgICAgICAgIDAuMTUgICAgICAgICAtMC4wNVxuaG91c2Vob2xkc2l6ZSAgICAgICAgICAgIDAuMDEgICAgICAgLTAuMTggICAgICAgICAgIC0wLjExICAgICAgICAgICAgICAgIDAuMDggICAgICAgICAtMC4xM1xuUGN0RmFtMlBhciAgICAgICAgICAgICAgIDAuNTUgICAgICAgLTAuMTggICAgICAgICAgIC0wLjExICAgICAgICAgICAgICAgLTAuNzIgICAgICAgICAtMC42MFxucmFjZXBjdGJsYWNrICAgICAgICAgICAgLTAuMzQgICAgICAgIDAuMTMgICAgICAgICAgICAwLjA2ICAgICAgICAgICAgICAgIDAuNjcgICAgICAgICAgMC40N1xucmFjZVBjdEhpc3AgICAgICAgICAgICAgLTAuMTAgICAgICAgLTAuMTAgICAgICAgICAgIC0wLjA1ICAgICAgICAgICAgICAgIDAuMTIgICAgICAgICAgMC4wN1xuYWdlUGN0MTZ0MjQgICAgICAgICAgICAgIDAuMDEgICAgICAgLTAuMTQgICAgICAgICAgIC0wLjEzICAgICAgICAgICAgICAgIDAuMTUgICAgICAgICAgMC4yMFxucGVyQ2FwSW5jICAgICAgICAgICAgICAgIDAuMzUgICAgICAgIDAuMTEgICAgICAgICAgICAwLjEyICAgICAgICAgICAgICAgLTAuMzQgICAgICAgICAtMC4yOFxucGN0V1NvY1NlYyAgICAgICAgICAgICAgLTAuNzMgICAgICAgIDAuMzAgICAgICAgICAgICAwLjE3ICAgICAgICAgICAgICAgIDAuMDMgICAgICAgICAgMC4wOVxucGN0V0ludkluYyAgICAgICAgICAgICAgIDAuNDAgICAgICAgIDAuMDYgICAgICAgICAgICAwLjA2ICAgICAgICAgICAgICAgLTAuNTkgICAgICAgICAtMC40NFxuUGN0UG9wVW5kZXJQb3YgICAgICAgICAgLTAuNjggICAgICAgIDAuMDIgICAgICAgICAgIC0wLjAzICAgICAgICAgICAgICAgIDAuNTkgICAgICAgICAgMC41OVxuUGN0Tm90SFNHcmFkICAgICAgICAgICAgLTAuNTcgICAgICAgIDAuMDMgICAgICAgICAgICAwLjAwICAgICAgICAgICAgICAgIDAuNDMgICAgICAgICAgMC4yNFxuUGN0RW1wbG95ICAgICAgICAgICAgICAgIDEuMDAgICAgICAgLTAuMjMgICAgICAgICAgIC0wLjEyICAgICAgICAgICAgICAgLTAuMzggICAgICAgICAtMC4zNlxuUG9saWNQZXJQb3AgICAgICAgICAgICAgLTAuMjMgICAgICAgIDEuMDAgICAgICAgICAgICAwLjkzICAgICAgICAgICAgICAgIDAuMDcgICAgICAgICAgMC4wNlxuUG9saWNCdWRnUGVyUG9wICAgICAgICAgLTAuMTIgICAgICAgIDAuOTMgICAgICAgICAgICAxLjAwICAgICAgICAgICAgICAgIDAuMDYgICAgICAgICAgMC4wNVxuVmlvbGVudENyaW1lc1BlclBvcCAgICAgLTAuMzggICAgICAgIDAuMDcgICAgICAgICAgICAwLjA2ICAgICAgICAgICAgICAgIDEuMDAgICAgICAgICAgMC42OVxubm9uVmlvbFBlclBvcCAgICAgICAgICAgLTAuMzYgICAgICAgIDAuMDYgICAgICAgICAgICAwLjA1ICAgICAgICAgICAgICAgIDAuNjkgICAgICAgICAgMS4wMFxuIn0= -->
-<pre><code>                    population PopDens householdsize PctFam2Par racepctblack racePctHisp
-population                1.00    0.21          0.02      -0.11         0.08        0.10
-PopDens                   0.21    1.00          0.10      -0.25         0.06        0.43
-householdsize             0.02    0.10          1.00       0.10         0.03        0.61
-PctFam2Par               -0.11   -0.25          0.10       1.00        -0.77        0.01
-racepctblack              0.08    0.06          0.03      -0.77         1.00       -0.20
-racePctHisp               0.10    0.43          0.61       0.01        -0.20        1.00
-agePct16t24               0.01    0.04          0.25      -0.25         0.16        0.08
-perCapInc                -0.04   -0.04         -0.34       0.48        -0.33       -0.20
-pctWSocSec               -0.10   -0.06         -0.35      -0.23         0.08       -0.23
-pctWInvInc               -0.09   -0.19         -0.41       0.65        -0.58       -0.37
-PctPopUnderPov            0.11    0.08          0.21      -0.74         0.55        0.29
-PctNotHSGrad              0.07    0.38          0.45      -0.57         0.38        0.51
-PctEmploy                -0.03   -0.03          0.01       0.55        -0.34       -0.10
-PolicPerPop              -0.02    0.02         -0.18      -0.18         0.13       -0.10
-PolicBudgPerPop          -0.02    0.03         -0.11      -0.11         0.06       -0.05
-ViolentCrimesPerPop       0.18    0.15          0.08      -0.72         0.67        0.12
-nonViolPerPop             0.05   -0.05         -0.13      -0.60         0.47        0.07
-                    agePct16t24 perCapInc pctWSocSec pctWInvInc PctPopUnderPov PctNotHSGrad
-population                 0.01     -0.04      -0.10      -0.09           0.11         0.07
-PopDens                    0.04     -0.04      -0.06      -0.19           0.08         0.38
-householdsize              0.25     -0.34      -0.35      -0.41           0.21         0.45
-PctFam2Par                -0.25      0.48      -0.23       0.65          -0.74        -0.57
-racepctblack               0.16     -0.33       0.08      -0.58           0.55         0.38
-racePctHisp                0.08     -0.20      -0.23      -0.37           0.29         0.51
-agePct16t24                1.00     -0.33      -0.33      -0.27           0.39         0.10
-perCapInc                 -0.33      1.00      -0.03       0.76          -0.63        -0.61
-pctWSocSec                -0.33     -0.03       1.00       0.07           0.14         0.28
-pctWInvInc                -0.27      0.76       0.07       1.00          -0.77        -0.76
-PctPopUnderPov             0.39     -0.63       0.14      -0.77           1.00         0.66
-PctNotHSGrad               0.10     -0.61       0.28      -0.76           0.66         1.00
-PctEmploy                  0.01      0.35      -0.73       0.40          -0.68        -0.57
-PolicPerPop               -0.14      0.11       0.30       0.06           0.02         0.03
-PolicBudgPerPop           -0.13      0.12       0.17       0.06          -0.03         0.00
-ViolentCrimesPerPop        0.15     -0.34       0.03      -0.59           0.59         0.43
-nonViolPerPop              0.20     -0.28       0.09      -0.44           0.59         0.24
-                    PctEmploy PolicPerPop PolicBudgPerPop ViolentCrimesPerPop nonViolPerPop
-population              -0.03       -0.02           -0.02                0.18          0.05
-PopDens                 -0.03        0.02            0.03                0.15         -0.05
-householdsize            0.01       -0.18           -0.11                0.08         -0.13
-PctFam2Par               0.55       -0.18           -0.11               -0.72         -0.60
-racepctblack            -0.34        0.13            0.06                0.67          0.47
-racePctHisp             -0.10       -0.10           -0.05                0.12          0.07
-agePct16t24              0.01       -0.14           -0.13                0.15          0.20
-perCapInc                0.35        0.11            0.12               -0.34         -0.28
-pctWSocSec              -0.73        0.30            0.17                0.03          0.09
-pctWInvInc               0.40        0.06            0.06               -0.59         -0.44
-PctPopUnderPov          -0.68        0.02           -0.03                0.59          0.59
-PctNotHSGrad            -0.57        0.03            0.00                0.43          0.24
-PctEmploy                1.00       -0.23           -0.12               -0.38         -0.36
-PolicPerPop             -0.23        1.00            0.93                0.07          0.06
-PolicBudgPerPop         -0.12        0.93            1.00                0.06          0.05
-ViolentCrimesPerPop     -0.38        0.07            0.06                1.00          0.69
-nonViolPerPop           -0.36        0.06            0.05                0.69          1.00</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBSRUdSRVNTVElPTlNcbmxtX1Zpb2xlbnRfd29fbmEgPSBsbShWaW9sZW50Q3JpbWVzUGVyUG9wfiBQb3BEZW5zICsgaG91c2Vob2xkc2l6ZSArIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIGFnZVBjdDE2dDI0ICsgcGVyQ2FwSW5jICsgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCArIFBjdEVtcGxveSArIFBvbGljUGVyUG9wICsgUG9saWNCdWRnUGVyUG9wLGRhdGEgPSBjb25jYXRfd29fbmEpXG5cblxubG1fVmlvbGVudF93aV9uYSA9IGxtKFZpb2xlbnRDcmltZXNQZXJQb3B+IFBvcERlbnMgKyBob3VzZWhvbGRzaXplICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIHJhY2VQY3RIaXNwICsgYWdlUGN0MTZ0MjQgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95LGRhdGEgPSBjb25jYXRfd2lfbmEpXG5cbnN1bW1hcnkobG1fVmlvbGVudF93b19uYSlcbmBgYCJ9 -->
-<pre class="r"><code># REGRESSTIONS
+#round(corr,2)
+#round(corr2,2)
+
+# REGRESSTIONS
 lm_Violent_wo_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy + PolicPerPop + PolicBudgPerPop,data = concat_wo_na)
 
 
 lm_Violent_wi_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wi_na)
 
-summary(lm_Violent_wo_na)</code></pre>
+#summary(lm_Violent_wo_na)
+
+#summary(lm_Violent_wi_na)</code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IFZpb2xlbnRDcmltZXNQZXJQb3AgfiBQb3BEZW5zICsgaG91c2Vob2xkc2l6ZSArIFxuICAgIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIGFnZVBjdDE2dDI0ICsgcGVyQ2FwSW5jICsgXG4gICAgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCArIFxuICAgIFBjdEVtcGxveSArIFBvbGljUGVyUG9wICsgUG9saWNCdWRnUGVyUG9wLCBkYXRhID0gY29uY2F0X3dvX25hKVxuXG5SZXNpZHVhbHM6XG4gICAgIE1pbiAgICAgICAxUSAgIE1lZGlhbiAgICAgICAzUSAgICAgIE1heCBcbi0xNTIxLjUwICAtMzAwLjIxICAgLTQ5Ljc1ICAgMjYyLjMwICAyMDcyLjU1IFxuXG5Db2VmZmljaWVudHM6XG4gICAgICAgICAgICAgICAgICBFc3RpbWF0ZSBTdGQuIEVycm9yIHQgdmFsdWUgUHIoPnx0fCkgICAgXG4oSW50ZXJjZXB0KSAgICAgIDYuNjI5ZSswMyAgMS40MjVlKzAzICAgNC42NTEgNS4wNmUtMDYgKioqXG5Qb3BEZW5zICAgICAgICAgLTEuMTk5ZS0wMiAgOC42MTRlLTAzICAtMS4zOTIgMC4xNjQ4OTMgICAgXG5ob3VzZWhvbGRzaXplICAgIDYuNTI2ZSswMSAgMS45NjZlKzAyICAgMC4zMzIgMC43NDAxODUgICAgXG5QY3RGYW0yUGFyICAgICAgLTQuNjAwZSswMSAgNy4zODVlKzAwICAtNi4yMjkgMS42NmUtMDkgKioqXG5yYWNlcGN0YmxhY2sgICAgIDEuMjMyZSswMSAgMy40ODllKzAwICAgMy41MzMgMC4wMDA0NzkgKioqXG5yYWNlUGN0SGlzcCAgICAgIDEuMTA4ZSswMSAgMy40NTBlKzAwICAgMy4yMTAgMC4wMDE0NzcgKiogXG5hZ2VQY3QxNnQyNCAgICAgLTEuNDk0ZSswMSAgMS4xMTBlKzAxICAtMS4zNDcgMC4xNzkwOTkgICAgXG5wZXJDYXBJbmMgICAgICAgIDEuMDA1ZS0wMiAgOC42NzhlLTAzICAgMS4xNTggMC4yNDc4NTMgICAgXG5wY3RXU29jU2VjICAgICAgLTEuMjc5ZSswMSAgMS4yMjNlKzAxICAtMS4wNDUgMC4yOTY3MTMgICAgXG5wY3RXSW52SW5jICAgICAgLTEuMzM4ZSswMSAgNy4xODBlKzAwICAtMS44NjQgMC4wNjMzNjkgLiAgXG5QY3RQb3BVbmRlclBvdiAgLTEuMTA4ZSswMSAgMS4yMjBlKzAxICAtMC45MDkgMC4zNjQzMDkgICAgXG5QY3ROb3RIU0dyYWQgICAgLTEuNzMwZSswMSAgOC4xMDZlKzAwICAtMi4xMzQgMC4wMzM2OTAgKiAgXG5QY3RFbXBsb3kgICAgICAgLTIuMjcyZSswMSAgMS4zNDNlKzAxICAtMS42OTIgMC4wOTE3NjMgLiAgXG5Qb2xpY1BlclBvcCAgICAgLTUuNzc2ZS0wMSAgMi45MzFlLTAxICAtMS45NzEgMC4wNDk2OTcgKiAgXG5Qb2xpY0J1ZGdQZXJQb3AgIDYuNDgwZS0wNCAgMy44MDdlLTA0ICAgMS43MDIgMC4wODk4NDAgLiAgXG4tLS1cblNpZ25pZi4gY29kZXM6ICAwIOKAmCoqKuKAmSAwLjAwMSDigJgqKuKAmSAwLjAxIOKAmCrigJkgMC4wNSDigJgu4oCZIDAuMSDigJgg4oCZIDFcblxuUmVzaWR1YWwgc3RhbmRhcmQgZXJyb3I6IDQ5Ni42IG9uIDI4NyBkZWdyZWVzIG9mIGZyZWVkb21cbk11bHRpcGxlIFItc3F1YXJlZDogIDAuNjI1LFx0QWRqdXN0ZWQgUi1zcXVhcmVkOiAgMC42MDY3IFxuRi1zdGF0aXN0aWM6IDM0LjE3IG9uIDE0IGFuZCAyODcgREYsICBwLXZhbHVlOiA8IDIuMmUtMTZcbiJ9 -->
-<pre><code>
-Call:
-lm(formula = ViolentCrimesPerPop ~ PopDens + householdsize + 
-    PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + 
-    pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + 
-    PctEmploy + PolicPerPop + PolicBudgPerPop, data = concat_wo_na)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--1521.50  -300.21   -49.75   262.30  2072.55 
-
-Coefficients:
-                  Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)      6.629e+03  1.425e+03   4.651 5.06e-06 ***
-PopDens         -1.199e-02  8.614e-03  -1.392 0.164893    
-householdsize    6.526e+01  1.966e+02   0.332 0.740185    
-PctFam2Par      -4.600e+01  7.385e+00  -6.229 1.66e-09 ***
-racepctblack     1.232e+01  3.489e+00   3.533 0.000479 ***
-racePctHisp      1.108e+01  3.450e+00   3.210 0.001477 ** 
-agePct16t24     -1.494e+01  1.110e+01  -1.347 0.179099    
-perCapInc        1.005e-02  8.678e-03   1.158 0.247853    
-pctWSocSec      -1.279e+01  1.223e+01  -1.045 0.296713    
-pctWInvInc      -1.338e+01  7.180e+00  -1.864 0.063369 .  
-PctPopUnderPov  -1.108e+01  1.220e+01  -0.909 0.364309    
-PctNotHSGrad    -1.730e+01  8.106e+00  -2.134 0.033690 *  
-PctEmploy       -2.272e+01  1.343e+01  -1.692 0.091763 .  
-PolicPerPop     -5.776e-01  2.931e-01  -1.971 0.049697 *  
-PolicBudgPerPop  6.480e-04  3.807e-04   1.702 0.089840 .  
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Residual standard error: 496.6 on 287 degrees of freedom
-Multiple R-squared:  0.625, Adjusted R-squared:  0.6067 
-F-statistic: 34.17 on 14 and 287 DF,  p-value: &lt; 2.2e-16</code></pre>
-<!-- rnb-output-end -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShsbV9WaW9sZW50X3dpX25hKVxuYGBgIn0= -->
-<pre class="r"><code>summary(lm_Violent_wi_na)</code></pre>
-<!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IFZpb2xlbnRDcmltZXNQZXJQb3AgfiBQb3BEZW5zICsgaG91c2Vob2xkc2l6ZSArIFxuICAgIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIGFnZVBjdDE2dDI0ICsgcGVyQ2FwSW5jICsgXG4gICAgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCArIFxuICAgIFBjdEVtcGxveSwgZGF0YSA9IGNvbmNhdF93aV9uYSlcblxuUmVzaWR1YWxzOlxuICAgICBNaW4gICAgICAgMVEgICBNZWRpYW4gICAgICAgM1EgICAgICBNYXggXG4tMTE5OS42MiAgLTE4My42OSAgIC0zMi4wNCAgIDEwNS44MyAgMjc1My4zMSBcblxuQ29lZmZpY2llbnRzOlxuICAgICAgICAgICAgICAgICBFc3RpbWF0ZSBTdGQuIEVycm9yIHQgdmFsdWUgUHIoPnx0fCkgICAgXG4oSW50ZXJjZXB0KSAgICAgMi4zMzNlKzAzICAzLjI3MWUrMDIgICA3LjEzMyAxLjQ2ZS0xMiAqKipcblBvcERlbnMgICAgICAgICAxLjE4MWUtMDIgIDQuMzczZS0wMyAgIDIuNzAxIDAuMDA2OTg4ICoqIFxuaG91c2Vob2xkc2l6ZSAgIDEuNDI2ZSswMiAgNC41NjhlKzAxICAgMy4xMjIgMC4wMDE4MjUgKiogXG5QY3RGYW0yUGFyICAgICAtMi43NDVlKzAxICAyLjI1M2UrMDAgLTEyLjE4NiAgPCAyZS0xNiAqKipcbnJhY2VwY3RibGFjayAgICAxLjAxNGUrMDEgIDEuMTAyZSswMCAgIDkuMjAzICA8IDJlLTE2ICoqKlxucmFjZVBjdEhpc3AgICAgIDUuMzAxZSswMCAgMS4wMjFlKzAwICAgNS4xOTEgMi4zNWUtMDcgKioqXG5hZ2VQY3QxNnQyNCAgICAtNy40MzhlKzAwICAyLjIxNmUrMDAgIC0zLjM1NiAwLjAwMDgwOCAqKipcbnBlckNhcEluYyAgICAgICAxLjEwN2UtMDIgIDIuNjkzZS0wMyAgIDQuMTEyIDQuMTJlLTA1ICoqKlxucGN0V1NvY1NlYyAgICAgLTQuNzc4ZS0wMiAgMi43NzJlKzAwICAtMC4wMTcgMC45ODYyNDggICAgXG5wY3RXSW52SW5jICAgICAtNi4xODBlKzAwICAxLjg1MWUrMDAgIC0zLjMzOCAwLjAwMDg2MiAqKipcblBjdFBvcFVuZGVyUG92IC0yLjkwNGUrMDAgIDIuNzkyZSswMCAgLTEuMDQwIDAuMjk4NDYxICAgIFxuUGN0Tm90SFNHcmFkICAgLTIuNjIwZS0wMSAgMS44NzNlKzAwICAtMC4xNDAgMC44ODg3OTIgICAgXG5QY3RFbXBsb3kgICAgICAtMS4wODdlKzAwICAyLjg0MmUrMDAgIC0wLjM4MyAwLjcwMjA4MyAgICBcbi0tLVxuU2lnbmlmLiBjb2RlczogIDAg4oCYKioq4oCZIDAuMDAxIOKAmCoq4oCZIDAuMDEg4oCYKuKAmSAwLjA1IOKAmC7igJkgMC4xIOKAmCDigJkgMVxuXG5SZXNpZHVhbCBzdGFuZGFyZCBlcnJvcjogMzU4Ljggb24gMTY3OSBkZWdyZWVzIG9mIGZyZWVkb21cbiAgKDIyMSBvYnNlcnZhdGlvbnMgZGVsZXRlZCBkdWUgdG8gbWlzc2luZ25lc3MpXG5NdWx0aXBsZSBSLXNxdWFyZWQ6ICAwLjU0MDIsXHRBZGp1c3RlZCBSLXNxdWFyZWQ6ICAwLjUzNjkgXG5GLXN0YXRpc3RpYzogMTY0LjQgb24gMTIgYW5kIDE2NzkgREYsICBwLXZhbHVlOiA8IDIuMmUtMTZcbiJ9 -->
-<pre><code>
-Call:
-lm(formula = ViolentCrimesPerPop ~ PopDens + householdsize + 
-    PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + 
-    pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + 
-    PctEmploy, data = concat_wi_na)
-
-Residuals:
-     Min       1Q   Median       3Q      Max 
--1199.62  -183.69   -32.04   105.83  2753.31 
-
-Coefficients:
-                 Estimate Std. Error t value Pr(&gt;|t|)    
-(Intercept)     2.333e+03  3.271e+02   7.133 1.46e-12 ***
-PopDens         1.181e-02  4.373e-03   2.701 0.006988 ** 
-householdsize   1.426e+02  4.568e+01   3.122 0.001825 ** 
-PctFam2Par     -2.745e+01  2.253e+00 -12.186  &lt; 2e-16 ***
-racepctblack    1.014e+01  1.102e+00   9.203  &lt; 2e-16 ***
-racePctHisp     5.301e+00  1.021e+00   5.191 2.35e-07 ***
-agePct16t24    -7.438e+00  2.216e+00  -3.356 0.000808 ***
-perCapInc       1.107e-02  2.693e-03   4.112 4.12e-05 ***
-pctWSocSec     -4.778e-02  2.772e+00  -0.017 0.986248    
-pctWInvInc     -6.180e+00  1.851e+00  -3.338 0.000862 ***
-PctPopUnderPov -2.904e+00  2.792e+00  -1.040 0.298461    
-PctNotHSGrad   -2.620e-01  1.873e+00  -0.140 0.888792    
-PctEmploy      -1.087e+00  2.842e+00  -0.383 0.702083    
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-Residual standard error: 358.8 on 1679 degrees of freedom
-  (221 observations deleted due to missingness)
-Multiple R-squared:  0.5402,    Adjusted R-squared:  0.5369 
-F-statistic: 164.4 on 12 and 1679 DF,  p-value: &lt; 2.2e-16</code></pre>
-<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <p><em>Signicant in sample with police data</em> : PctFam2Par, racepctblack, racepctHisp, pctWInvInc, PctNotGradHS, PctEmploy, PolicPerPop, PolicBudgPerPop</p>
@@ -527,14 +313,47 @@ F-statistic: 164.4 on 12 and 1679 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p><em>Overlap</em> : PctFam2PAr, racepctblack, racepctHisp, pctWInvInc</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG1fbm9udmlvbGVudF93aV9uYSA9IGxtKG5vblZpb2xQZXJQb3B+IHBvcHVsYXRpb24gKyBQY3RGYW0yUGFyICsgcmFjZXBjdGJsYWNrICsgcmFjZVBjdEhpc3AgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95LGRhdGEgPSBjb25jYXRfd2lfbmEpXG5zdW1tYXJ5KGxtX25vbnZpb2xlbnRfd2lfbmEpXG5cbiMgU2lnbnMgZG9uJ3QgbWFrZSBzZW5zZSA6IFBjdE5vdEhTR3JhZCBuZWdhdGl2ZVxuXG5sbV9ub252aW9sZW50X3dvX25hID0gbG0obm9uVmlvbFBlclBvcH4gcG9wdWxhdGlvbiArIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIHBlckNhcEluYyArIHBjdFdTb2NTZWMgKyBwY3RXSW52SW5jICsgUGN0UG9wVW5kZXJQb3YgKyBQY3ROb3RIU0dyYWQgKyBQY3RFbXBsb3krUG9saWNQZXJQb3AgKyBQb2xpY0J1ZGdQZXJQb3AsZGF0YSA9IGNvbmNhdF93b19uYSlcbnN1bW1hcnkobG1fbm9udmlvbGVudF93b19uYSlcbiMgU2lnbnMgdGhhdCBkb24ndCBtYWtlIHNlbnNlIDogUGN0Tm90SFNHcmFkIG5lZ2F0aXZlXG4jUGVyaGFwaHMgZG8gbm90IHVzZSBib3RoIHBvbGljYnVkZ3BlcnBvcCBhbmQgcGVyQ2FwSW5jLCB2ZXJ5IGxpa2VseSBjb3JyZWxhdGVkLiBcblxuIyBDcmVhdGUgYWdncmVnYXRlZCBjcmltZSB2YXJpYWJsZVxuY29uY2F0X3dpX25hJGFnZ3JlZ2F0ZWRDcmltZSA8LSBjb25jYXRfd2lfbmEkVmlvbGVudENyaW1lc1BlclBvcCArIGNvbmNhdF93aV9uYSRub25WaW9sUGVyUG9wXG5jb25jYXRfd29fbmEkYWdncmVnYXRlZENyaW1lIDwtIGNvbmNhdF93b19uYSRWaW9sZW50Q3JpbWVzUGVyUG9wICsgY29uY2F0X3dvX25hJG5vblZpb2xQZXJQb3BcblxuIyBUZXN0IHJlZ3Jlc3Npb25zIG9uIGFnZ3JlZ2F0ZWQgYW5kIHRoZW4gc2VwZXJhdGUgdG8gc2VlIHdoYXQncyBiaWFzaW5nIGNvZWZmaWNpZW50cyB1cC9kb3duXG5cbmxtX2FnZ3JlZ2F0ZWRfd2lfbmEgPSBsbShhZ2dyZWdhdGVkQ3JpbWV+IFBvcERlbnMgKyBQY3RGYW0yUGFyICsgcmFjZXBjdGJsYWNrICsgcmFjZVBjdEhpc3AgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95LGRhdGEgPSBjb25jYXRfd2lfbmEpXG5zdW1tYXJ5KGxtX2FnZ3JlZ2F0ZWRfd2lfbmEpXG5cbmxtX2FnZ3JlZ2F0ZWRfd29fbmEgPSBsbShhZ2dyZWdhdGVkQ3JpbWV+IFBvcERlbnMgKyBQY3RGYW0yUGFyICsgcmFjZXBjdGJsYWNrICsgcmFjZVBjdEhpc3AgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95KyBQb2xpY1BlclBvcCArIFBvbGljQnVkZ1BlclBvcCAsZGF0YSA9IGNvbmNhdF93b19uYSlcbnN1bW1hcnkobG1fYWdncmVnYXRlZF93b19uYSlcbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG1fbm9udmlvbGVudF93aV9uYSA9IGxtKG5vblZpb2xQZXJQb3B+IHBvcHVsYXRpb24gKyBQY3RGYW0yUGFyICsgcmFjZXBjdGJsYWNrICsgcmFjZVBjdEhpc3AgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95LGRhdGEgPSBjb25jYXRfd2lfbmEpXG5zdW1tYXJ5KGxtX25vbnZpb2xlbnRfd2lfbmEpXG5gYGAifQ== -->
 <pre class="r"><code>lm_nonviolent_wi_na = lm(nonViolPerPop~ population + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wi_na)
-summary(lm_nonviolent_wi_na)
+summary(lm_nonviolent_wi_na)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IG5vblZpb2xQZXJQb3AgfiBwb3B1bGF0aW9uICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIFxuICAgIHJhY2VQY3RIaXNwICsgcGVyQ2FwSW5jICsgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFxuICAgIFBjdE5vdEhTR3JhZCArIFBjdEVtcGxveSwgZGF0YSA9IGNvbmNhdF93aV9uYSlcblxuUmVzaWR1YWxzOlxuICAgIE1pbiAgICAgIDFRICBNZWRpYW4gICAgICAzUSAgICAgTWF4IFxuLTY1NDYuMCAtMTEwMi44ICAtMjI5LjUgICA3NzMuNiAyNDM5MS41IFxuXG5Db2VmZmljaWVudHM6XG4gICAgICAgICAgICAgICAgIEVzdGltYXRlIFN0ZC4gRXJyb3IgdCB2YWx1ZSBQcig+fHR8KSAgICBcbihJbnRlcmNlcHQpICAgICAxLjAyMmUrMDQgIDEuNTYxZSswMyAgIDYuNTQ5IDcuNTFlLTExICoqKlxucG9wdWxhdGlvbiAgICAgIDIuOTI1ZS0wNCAgNS43NzZlLTA0ICAgMC41MDYgMC42MTI2MDYgICAgXG5QY3RGYW0yUGFyICAgICAtMS40NzllKzAyICAxLjAxNmUrMDEgLTE0LjU1MyAgPCAyZS0xNiAqKipcbnJhY2VwY3RibGFjayAgICA4LjMwNGUrMDAgIDUuMzkyZSswMCAgIDEuNTQwIDAuMTIzNzE4ICAgIFxucmFjZVBjdEhpc3AgICAgIDIuNzAyZSswMSAgNC43MzllKzAwICAgNS43MDEgMS4zOWUtMDggKioqXG5wZXJDYXBJbmMgICAgICAgMy45NzNlLTAyICAxLjMyMmUtMDIgICAzLjAwNSAwLjAwMjY5MiAqKiBcbnBjdFdTb2NTZWMgICAgICA3LjM4OWUrMDEgIDEuMjYyZSswMSAgIDUuODU0IDUuNzBlLTA5ICoqKlxucGN0V0ludkluYyAgICAgLTMuNTYyZSswMSAgOS41NDNlKzAwICAtMy43MzIgMC4wMDAxOTYgKioqXG5QY3RQb3BVbmRlclBvdiAgNS4yMTBlKzAxICAxLjI5OWUrMDEgICA0LjAxMSA2LjMwZS0wNSAqKipcblBjdE5vdEhTR3JhZCAgIC00LjYzNGUrMDEgIDkuOTQ1ZSswMCAgLTQuNjU5IDMuNDBlLTA2ICoqKlxuUGN0RW1wbG95ICAgICAgIDcuNTE5ZSswMSAgMS4zOTZlKzAxICAgNS4zODcgOC4wOGUtMDggKioqXG4tLS1cblNpZ25pZi4gY29kZXM6ICAwIOKAmCoqKuKAmSAwLjAwMSDigJgqKuKAmSAwLjAxIOKAmCrigJkgMC4wNSDigJgu4oCZIDAuMSDigJgg4oCZIDFcblxuUmVzaWR1YWwgc3RhbmRhcmQgZXJyb3I6IDE5OTAgb24gMTgwNSBkZWdyZWVzIG9mIGZyZWVkb21cbiAgKDk3IG9ic2VydmF0aW9ucyBkZWxldGVkIGR1ZSB0byBtaXNzaW5nbmVzcylcbk11bHRpcGxlIFItc3F1YXJlZDogIDAuNDI2NSxcdEFkanVzdGVkIFItc3F1YXJlZDogIDAuNDIzNCBcbkYtc3RhdGlzdGljOiAxMzQuMyBvbiAxMCBhbmQgMTgwNSBERiwgIHAtdmFsdWU6IDwgMi4yZS0xNlxuIn0= -->
+<pre><code>
+Call:
+lm(formula = nonViolPerPop ~ population + PctFam2Par + racepctblack + 
+    racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + 
+    PctNotHSGrad + PctEmploy, data = concat_wi_na)
 
-# Signs don&#39;t make sense : PctNotHSGrad negative
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6546.0 -1102.8  -229.5   773.6 24391.5 
+
+Coefficients:
+                 Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     1.022e+04  1.561e+03   6.549 7.51e-11 ***
+population      2.925e-04  5.776e-04   0.506 0.612606    
+PctFam2Par     -1.479e+02  1.016e+01 -14.553  &lt; 2e-16 ***
+racepctblack    8.304e+00  5.392e+00   1.540 0.123718    
+racePctHisp     2.702e+01  4.739e+00   5.701 1.39e-08 ***
+perCapInc       3.973e-02  1.322e-02   3.005 0.002692 ** 
+pctWSocSec      7.389e+01  1.262e+01   5.854 5.70e-09 ***
+pctWInvInc     -3.562e+01  9.543e+00  -3.732 0.000196 ***
+PctPopUnderPov  5.210e+01  1.299e+01   4.011 6.30e-05 ***
+PctNotHSGrad   -4.634e+01  9.945e+00  -4.659 3.40e-06 ***
+PctEmploy       7.519e+01  1.396e+01   5.387 8.08e-08 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 1990 on 1805 degrees of freedom
+  (97 observations deleted due to missingness)
+Multiple R-squared:  0.4265,    Adjusted R-squared:  0.4234 
+F-statistic: 134.3 on 10 and 1805 DF,  p-value: &lt; 2.2e-16</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBTaWducyBkb24ndCBtYWtlIHNlbnNlIDogUGN0Tm90SFNHcmFkIG5lZ2F0aXZlXG5cbmxtX25vbnZpb2xlbnRfd29fbmEgPSBsbShub25WaW9sUGVyUG9wfiBwb3B1bGF0aW9uICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIHJhY2VQY3RIaXNwICsgcGVyQ2FwSW5jICsgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCArIFBjdEVtcGxveStQb2xpY1BlclBvcCArIFBvbGljQnVkZ1BlclBvcCxkYXRhID0gY29uY2F0X3dvX25hKVxuI3N1bW1hcnkobG1fbm9udmlvbGVudF93b19uYSlcbiMgU2lnbnMgdGhhdCBkb24ndCBtYWtlIHNlbnNlIDogUGN0Tm90SFNHcmFkIG5lZ2F0aXZlXG4jUGVyaGFwaHMgZG8gbm90IHVzZSBib3RoIHBvbGljYnVkZ3BlcnBvcCBhbmQgcGVyQ2FwSW5jLCB2ZXJ5IGxpa2VseSBjb3JyZWxhdGVkLiBcblxuIyBDcmVhdGUgYWdncmVnYXRlZCBjcmltZSB2YXJpYWJsZVxuY29uY2F0X3dpX25hJGFnZ3JlZ2F0ZWRDcmltZSA8LSBjb25jYXRfd2lfbmEkVmlvbGVudENyaW1lc1BlclBvcCArIGNvbmNhdF93aV9uYSRub25WaW9sUGVyUG9wXG5jb25jYXRfd29fbmEkYWdncmVnYXRlZENyaW1lIDwtIGNvbmNhdF93b19uYSRWaW9sZW50Q3JpbWVzUGVyUG9wICsgY29uY2F0X3dvX25hJG5vblZpb2xQZXJQb3BcblxuIyBUZXN0IHJlZ3Jlc3Npb25zIG9uIGFnZ3JlZ2F0ZWQgYW5kIHRoZW4gc2VwZXJhdGUgdG8gc2VlIHdoYXQncyBiaWFzaW5nIGNvZWZmaWNpZW50cyB1cC9kb3duXG5cbmxtX2FnZ3JlZ2F0ZWRfd2lfbmEgPSBsbShhZ2dyZWdhdGVkQ3JpbWV+IFBvcERlbnMgKyBQY3RGYW0yUGFyICsgcmFjZXBjdGJsYWNrICsgcmFjZVBjdEhpc3AgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95LGRhdGEgPSBjb25jYXRfd2lfbmEpXG4jc3VtbWFyeShsbV9hZ2dyZWdhdGVkX3dpX25hKVxuXG5sbV9hZ2dyZWdhdGVkX3dvX25hID0gbG0oYWdncmVnYXRlZENyaW1lfiBQb3BEZW5zICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIHJhY2VQY3RIaXNwICsgcGVyQ2FwSW5jICsgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCArIFBjdEVtcGxveSsgUG9saWNQZXJQb3AgKyBQb2xpY0J1ZGdQZXJQb3AgLGRhdGEgPSBjb25jYXRfd29fbmEpXG4jc3VtbWFyeShsbV9hZ2dyZWdhdGVkX3dvX25hKVxuYGBgIn0= -->
+<pre class="r"><code># Signs don&#39;t make sense : PctNotHSGrad negative
 
 lm_nonviolent_wo_na = lm(nonViolPerPop~ population + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy+PolicPerPop + PolicBudgPerPop,data = concat_wo_na)
-summary(lm_nonviolent_wo_na)
+#summary(lm_nonviolent_wo_na)
 # Signs that don&#39;t make sense : PctNotHSGrad negative
 #Perhaphs do not use both policbudgperpop and perCapInc, very likely correlated. 
 
@@ -545,10 +364,10 @@ concat_wo_na$aggregatedCrime &lt;- concat_wo_na$ViolentCrimesPerPop + concat_wo_
 # Test regressions on aggregated and then seperate to see what&#39;s biasing coefficients up/down
 
 lm_aggregated_wi_na = lm(aggregatedCrime~ PopDens + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wi_na)
-summary(lm_aggregated_wi_na)
+#summary(lm_aggregated_wi_na)
 
 lm_aggregated_wo_na = lm(aggregatedCrime~ PopDens + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy+ PolicPerPop + PolicBudgPerPop ,data = concat_wo_na)
-summary(lm_aggregated_wo_na)</code></pre>
+#summary(lm_aggregated_wo_na)</code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -556,9 +375,9 @@ summary(lm_aggregated_wo_na)</code></pre>
 <p><em>Signicant in sample without police data</em> : population, PctFam2Par, racepctblack, racePctHisp, perCapInc, pctWSocSec, pctWInvInc, pctPopUnderfPov, pctnotHSGrad, PctEmploy Signs that don’t make sense : PerCapInc positive, PctNotHSGrad negative, PctEmploy positive, PolicBudgPerPop positive.</p>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG1fYWdncmVnYXRlZF90ZXN0cyA9IGxtKGFnZ3JlZ2F0ZWRDcmltZX4gcG9wdWxhdGlvbiArIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIHBlckNhcEluYyArIHBjdFdTb2NTZWMgKyBwY3RXSW52SW5jICsgUGN0UG9wVW5kZXJQb3YgKyBQY3ROb3RIU0dyYWQrIFBvbGljUGVyUG9wICxkYXRhID0gY29uY2F0X3dvX25hKVxuc3VtbWFyeShsbV9hZ2dyZWdhdGVkX3Rlc3RzKVxuXG5cbmBgYCJ9 -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubG1fYWdncmVnYXRlZF90ZXN0cyA9IGxtKGFnZ3JlZ2F0ZWRDcmltZX4gcG9wdWxhdGlvbiArIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIHBlckNhcEluYyArIHBjdFdTb2NTZWMgKyBwY3RXSW52SW5jICsgUGN0UG9wVW5kZXJQb3YgKyBQY3ROb3RIU0dyYWQrIFBvbGljUGVyUG9wICxkYXRhID0gY29uY2F0X3dvX25hKVxuI3N1bW1hcnkobG1fYWdncmVnYXRlZF90ZXN0cylcblxuXG5gYGAifQ== -->
 <pre class="r"><code>lm_aggregated_tests = lm(aggregatedCrime~ population + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad+ PolicPerPop ,data = concat_wo_na)
-summary(lm_aggregated_tests)
+#summary(lm_aggregated_tests)
 </code></pre>
 <!-- rnb-source-end -->
 <!-- rnb-chunk-end -->
@@ -568,20 +387,116 @@ summary(lm_aggregated_tests)
 <h1>Model Selection using information criteria</h1>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVscChsZWFwcylcblxuYGBgIn0= -->
-<pre class="r"><code>help(leaps)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZHJvcHBlcnMgPC0gYyhcImNvbW11bml0eW5hbWVcIiwgXCJzdGF0ZVwiLCBcIm5vblZpb2xQZXJQb3BcIiwgXCJhZ2dyZWdhdGVkQ3JpbWVcIilcbnN1YnNfc2FtcGxlIDwtIHNlbGVjdChjb25jYXRfd29fbmEsLWFsbF9vZihkcm9wcGVycykpXG5zdWJzIDwtIHJlZ3N1YnNldHMoVmlvbGVudENyaW1lc1BlclBvcH4uLCBkYXRhID0gc3Vic19zYW1wbGUsIG52bWF4ID0gNywgbWV0aG9kID0gXCJmb3J3YXJkXCIpXG5zdW1tYXJ5KHN1YnMpXG5gYGAifQ== -->
+<pre class="r"><code>droppers &lt;- c(&quot;communityname&quot;, &quot;state&quot;, &quot;nonViolPerPop&quot;, &quot;aggregatedCrime&quot;)
+subs_sample &lt;- select(concat_wo_na,-all_of(droppers))
+subs &lt;- regsubsets(ViolentCrimesPerPop~., data = subs_sample, nvmax = 7, method = &quot;forward&quot;)
+summary(subs)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiU3Vic2V0IHNlbGVjdGlvbiBvYmplY3RcbkNhbGw6IHJlZ3N1YnNldHMuZm9ybXVsYShWaW9sZW50Q3JpbWVzUGVyUG9wIH4gLiwgZGF0YSA9IHN1YnNfc2FtcGxlLCBcbiAgICBudm1heCA9IDcsIG1ldGhvZCA9IFwiZm9yd2FyZFwiKVxuMTUgVmFyaWFibGVzICAoYW5kIGludGVyY2VwdClcbiAgICAgICAgICAgICAgICBGb3JjZWQgaW4gRm9yY2VkIG91dFxucG9wdWxhdGlvbiAgICAgICAgICBGQUxTRSAgICAgIEZBTFNFXG5Qb3BEZW5zICAgICAgICAgICAgIEZBTFNFICAgICAgRkFMU0VcbmhvdXNlaG9sZHNpemUgICAgICAgRkFMU0UgICAgICBGQUxTRVxuUGN0RmFtMlBhciAgICAgICAgICBGQUxTRSAgICAgIEZBTFNFXG5yYWNlcGN0YmxhY2sgICAgICAgIEZBTFNFICAgICAgRkFMU0VcbnJhY2VQY3RIaXNwICAgICAgICAgRkFMU0UgICAgICBGQUxTRVxuYWdlUGN0MTZ0MjQgICAgICAgICBGQUxTRSAgICAgIEZBTFNFXG5wZXJDYXBJbmMgICAgICAgICAgIEZBTFNFICAgICAgRkFMU0VcbnBjdFdTb2NTZWMgICAgICAgICAgRkFMU0UgICAgICBGQUxTRVxucGN0V0ludkluYyAgICAgICAgICBGQUxTRSAgICAgIEZBTFNFXG5QY3RQb3BVbmRlclBvdiAgICAgIEZBTFNFICAgICAgRkFMU0VcblBjdE5vdEhTR3JhZCAgICAgICAgRkFMU0UgICAgICBGQUxTRVxuUGN0RW1wbG95ICAgICAgICAgICBGQUxTRSAgICAgIEZBTFNFXG5Qb2xpY1BlclBvcCAgICAgICAgIEZBTFNFICAgICAgRkFMU0VcblBvbGljQnVkZ1BlclBvcCAgICAgRkFMU0UgICAgICBGQUxTRVxuMSBzdWJzZXRzIG9mIGVhY2ggc2l6ZSB1cCB0byA3XG5TZWxlY3Rpb24gQWxnb3JpdGhtOiBmb3J3YXJkXG4gICAgICAgICBwb3B1bGF0aW9uIFBvcERlbnMgaG91c2Vob2xkc2l6ZSBQY3RGYW0yUGFyIHJhY2VwY3RibGFjayByYWNlUGN0SGlzcCBhZ2VQY3QxNnQyNFxuMSAgKCAxICkgXCIgXCIgICAgICAgIFwiIFwiICAgICBcIiBcIiAgICAgICAgICAgXCIqXCIgICAgICAgIFwiIFwiICAgICAgICAgIFwiIFwiICAgICAgICAgXCIgXCIgICAgICAgIFxuMiAgKCAxICkgXCIgXCIgICAgICAgIFwiIFwiICAgICBcIiBcIiAgICAgICAgICAgXCIqXCIgICAgICAgIFwiKlwiICAgICAgICAgIFwiIFwiICAgICAgICAgXCIgXCIgICAgICAgIFxuMyAgKCAxICkgXCIgXCIgICAgICAgIFwiIFwiICAgICBcIiBcIiAgICAgICAgICAgXCIqXCIgICAgICAgIFwiKlwiICAgICAgICAgIFwiKlwiICAgICAgICAgXCIgXCIgICAgICAgIFxuNCAgKCAxICkgXCIgXCIgICAgICAgIFwiIFwiICAgICBcIiBcIiAgICAgICAgICAgXCIqXCIgICAgICAgIFwiKlwiICAgICAgICAgIFwiKlwiICAgICAgICAgXCIgXCIgICAgICAgIFxuNSAgKCAxICkgXCIgXCIgICAgICAgIFwiIFwiICAgICBcIiBcIiAgICAgICAgICAgXCIqXCIgICAgICAgIFwiKlwiICAgICAgICAgIFwiKlwiICAgICAgICAgXCIgXCIgICAgICAgIFxuNiAgKCAxICkgXCIqXCIgICAgICAgIFwiIFwiICAgICBcIiBcIiAgICAgICAgICAgXCIqXCIgICAgICAgIFwiKlwiICAgICAgICAgIFwiKlwiICAgICAgICAgXCIgXCIgICAgICAgIFxuNyAgKCAxICkgXCIqXCIgICAgICAgIFwiKlwiICAgICBcIiBcIiAgICAgICAgICAgXCIqXCIgICAgICAgIFwiKlwiICAgICAgICAgIFwiKlwiICAgICAgICAgXCIgXCIgICAgICAgIFxuICAgICAgICAgcGVyQ2FwSW5jIHBjdFdTb2NTZWMgcGN0V0ludkluYyBQY3RQb3BVbmRlclBvdiBQY3ROb3RIU0dyYWQgUGN0RW1wbG95IFBvbGljUGVyUG9wXG4xICAoIDEgKSBcIiBcIiAgICAgICBcIiBcIiAgICAgICAgXCIgXCIgICAgICAgIFwiIFwiICAgICAgICAgICAgXCIgXCIgICAgICAgICAgXCIgXCIgICAgICAgXCIgXCIgICAgICAgIFxuMiAgKCAxICkgXCIgXCIgICAgICAgXCIgXCIgICAgICAgIFwiIFwiICAgICAgICBcIiBcIiAgICAgICAgICAgIFwiIFwiICAgICAgICAgIFwiIFwiICAgICAgIFwiIFwiICAgICAgICBcbjMgICggMSApIFwiIFwiICAgICAgIFwiIFwiICAgICAgICBcIiBcIiAgICAgICAgXCIgXCIgICAgICAgICAgICBcIiBcIiAgICAgICAgICBcIiBcIiAgICAgICBcIiBcIiAgICAgICAgXG40ICAoIDEgKSBcIiBcIiAgICAgICBcIiBcIiAgICAgICAgXCIgXCIgICAgICAgIFwiIFwiICAgICAgICAgICAgXCIqXCIgICAgICAgICAgXCIgXCIgICAgICAgXCIgXCIgICAgICAgIFxuNSAgKCAxICkgXCIgXCIgICAgICAgXCIgXCIgICAgICAgIFwiKlwiICAgICAgICBcIiBcIiAgICAgICAgICAgIFwiKlwiICAgICAgICAgIFwiIFwiICAgICAgIFwiIFwiICAgICAgICBcbjYgICggMSApIFwiIFwiICAgICAgIFwiIFwiICAgICAgICBcIipcIiAgICAgICAgXCIgXCIgICAgICAgICAgICBcIipcIiAgICAgICAgICBcIiBcIiAgICAgICBcIiBcIiAgICAgICAgXG43ICAoIDEgKSBcIiBcIiAgICAgICBcIiBcIiAgICAgICAgXCIqXCIgICAgICAgIFwiIFwiICAgICAgICAgICAgXCIqXCIgICAgICAgICAgXCIgXCIgICAgICAgXCIgXCIgICAgICAgIFxuICAgICAgICAgUG9saWNCdWRnUGVyUG9wXG4xICAoIDEgKSBcIiBcIiAgICAgICAgICAgIFxuMiAgKCAxICkgXCIgXCIgICAgICAgICAgICBcbjMgICggMSApIFwiIFwiICAgICAgICAgICAgXG40ICAoIDEgKSBcIiBcIiAgICAgICAgICAgIFxuNSAgKCAxICkgXCIgXCIgICAgICAgICAgICBcbjYgICggMSApIFwiIFwiICAgICAgICAgICAgXG43ICAoIDEgKSBcIiBcIiAgICAgICAgICAgIFxuIn0= -->
+<pre><code>Subset selection object
+Call: regsubsets.formula(ViolentCrimesPerPop ~ ., data = subs_sample, 
+    nvmax = 7, method = &quot;forward&quot;)
+15 Variables  (and intercept)
+                Forced in Forced out
+population          FALSE      FALSE
+PopDens             FALSE      FALSE
+householdsize       FALSE      FALSE
+PctFam2Par          FALSE      FALSE
+racepctblack        FALSE      FALSE
+racePctHisp         FALSE      FALSE
+agePct16t24         FALSE      FALSE
+perCapInc           FALSE      FALSE
+pctWSocSec          FALSE      FALSE
+pctWInvInc          FALSE      FALSE
+PctPopUnderPov      FALSE      FALSE
+PctNotHSGrad        FALSE      FALSE
+PctEmploy           FALSE      FALSE
+PolicPerPop         FALSE      FALSE
+PolicBudgPerPop     FALSE      FALSE
+1 subsets of each size up to 7
+Selection Algorithm: forward
+         population PopDens householdsize PctFam2Par racepctblack racePctHisp agePct16t24
+1  ( 1 ) &quot; &quot;        &quot; &quot;     &quot; &quot;           &quot;*&quot;        &quot; &quot;          &quot; &quot;         &quot; &quot;        
+2  ( 1 ) &quot; &quot;        &quot; &quot;     &quot; &quot;           &quot;*&quot;        &quot;*&quot;          &quot; &quot;         &quot; &quot;        
+3  ( 1 ) &quot; &quot;        &quot; &quot;     &quot; &quot;           &quot;*&quot;        &quot;*&quot;          &quot;*&quot;         &quot; &quot;        
+4  ( 1 ) &quot; &quot;        &quot; &quot;     &quot; &quot;           &quot;*&quot;        &quot;*&quot;          &quot;*&quot;         &quot; &quot;        
+5  ( 1 ) &quot; &quot;        &quot; &quot;     &quot; &quot;           &quot;*&quot;        &quot;*&quot;          &quot;*&quot;         &quot; &quot;        
+6  ( 1 ) &quot;*&quot;        &quot; &quot;     &quot; &quot;           &quot;*&quot;        &quot;*&quot;          &quot;*&quot;         &quot; &quot;        
+7  ( 1 ) &quot;*&quot;        &quot;*&quot;     &quot; &quot;           &quot;*&quot;        &quot;*&quot;          &quot;*&quot;         &quot; &quot;        
+         perCapInc pctWSocSec pctWInvInc PctPopUnderPov PctNotHSGrad PctEmploy PolicPerPop
+1  ( 1 ) &quot; &quot;       &quot; &quot;        &quot; &quot;        &quot; &quot;            &quot; &quot;          &quot; &quot;       &quot; &quot;        
+2  ( 1 ) &quot; &quot;       &quot; &quot;        &quot; &quot;        &quot; &quot;            &quot; &quot;          &quot; &quot;       &quot; &quot;        
+3  ( 1 ) &quot; &quot;       &quot; &quot;        &quot; &quot;        &quot; &quot;            &quot; &quot;          &quot; &quot;       &quot; &quot;        
+4  ( 1 ) &quot; &quot;       &quot; &quot;        &quot; &quot;        &quot; &quot;            &quot;*&quot;          &quot; &quot;       &quot; &quot;        
+5  ( 1 ) &quot; &quot;       &quot; &quot;        &quot;*&quot;        &quot; &quot;            &quot;*&quot;          &quot; &quot;       &quot; &quot;        
+6  ( 1 ) &quot; &quot;       &quot; &quot;        &quot;*&quot;        &quot; &quot;            &quot;*&quot;          &quot; &quot;       &quot; &quot;        
+7  ( 1 ) &quot; &quot;       &quot; &quot;        &quot;*&quot;        &quot; &quot;            &quot;*&quot;          &quot; &quot;       &quot; &quot;        
+         PolicBudgPerPop
+1  ( 1 ) &quot; &quot;            
+2  ( 1 ) &quot; &quot;            
+3  ( 1 ) &quot; &quot;            
+4  ( 1 ) &quot; &quot;            
+5  ( 1 ) &quot; &quot;            
+6  ( 1 ) &quot; &quot;            
+7  ( 1 ) &quot; &quot;            </code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3Vicy5zdW0gPC0gc3VtbWFyeShzdWJzKVxuZGF0YS5mcmFtZShcbiAgQWRqLlIyID0gd2hpY2gubWF4KHN1YnMuc3VtJGFkanIyKSxcbiAgQ1AgPSB3aGljaC5taW4oc3Vicy5zdW0kY3ApLFxuICBCSUMgPSB3aGljaC5taW4oc3Vicy5zdW0kYmljKVxuKVxuYGBgIn0= -->
+<pre class="r"><code>subs.sum &lt;- summary(subs)
+data.frame(
+  Adj.R2 = which.max(subs.sum$adjr2),
+  CP = which.min(subs.sum$cp),
+  BIC = which.min(subs.sum$bic)
+)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-frame-begin eyJtZXRhZGF0YSI6eyJjbGFzc2VzIjpbImRhdGEuZnJhbWUiXSwibnJvdyI6MSwibmNvbCI6Mywic3VtbWFyeSI6eyJEZXNjcmlwdGlvbiI6WyJkZiBbMSDDlyAzXSJdfX0sInJkZiI6Ikg0c0lBQUFBQUFBQUEzVlBRVzdDTUJCY0p6RVJrYWdpOFk3NEVBNXdMVlNWZWtPb1NGemRKRUFndFZGaTFMNCtkR084U0ZqcXliUGpuWjJaemR0dWx1d1NBQWdoWWd4Q2poRDQ5dk05V3dCRUFRNE1JaGdQN3k4dVRlMG13TVIrQU1ULzRNZ1RjeVcvcXc1QmVyZXk1T2kxUElsTjdxWmd0WFlvWEg2c1BQMjQxVCtDYnBBSjgwMktSblprUW1SU1NpUEZ2a1V0VHIwbmlmWEYxRnFoS0JpcWNVL01XbzlJcjJwSVVXYkY4YXJPV1Q0ZkhGd2NlSTcyd09IZE03aTVXNXpxVitwUXE0ckNOL0tyYXR6d2duVnRXM0ZwYTJXb0NyS2RNTnBJMmtzSzNSQmp5MEgvQjRaNkVURFNBUUFBIn0= -->
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["Adj.R2"],"name":[1],"type":["int"],"align":["right"]},{"label":["CP"],"name":[2],"type":["int"],"align":["right"]},{"label":["BIC"],"name":[3],"type":["int"],"align":["right"]}],"data":[{"1":"7","2":"7","3":"4"}],"options":{"columns":{"min":{},"max":[10],"total":[3]},"rows":{"min":[10],"max":[10],"total":[1]},"pages":{}}}
+  </script>
+</div>
+<!-- rnb-frame-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuTkFcbmBgYCJ9 -->
+<pre class="r"><code>NA</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3VtbWFyeShmcm9tX3N1YnMpXG5cbmBgYCJ9 -->
+<pre class="r"><code>summary(from_subs)
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiTm8gZG9jdW1lbnRhdGlvbiBmb3Ig4oCYbGVhcHPigJkgaW4gc3BlY2lmaWVkIHBhY2thZ2VzIGFuZCBsaWJyYXJpZXM6XG55b3UgY291bGQgdHJ5IOKAmD8/bGVhcHPigJlcbiJ9 -->
-<pre><code>No documentation for ‘leaps’ in specified packages and libraries:
-you could try ‘??leaps’</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiXG5DYWxsOlxubG0oZm9ybXVsYSA9IFZpb2xlbnRDcmltZXNQZXJQb3AgfiBQY3RGYW0yUGFyICsgcmFjZXBjdGJsYWNrICsgXG4gICAgcmFjZVBjdEhpc3AgKyBQY3ROb3RIU0dyYWQsIGRhdGEgPSBjb25jYXRfd29fbmEpXG5cblJlc2lkdWFsczpcbiAgICAgTWluICAgICAgIDFRICAgTWVkaWFuICAgICAgIDNRICAgICAgTWF4IFxuLTE2MTguOTggIC0zMjcuMjkgICAtNzUuMjcgICAyMjQuNTUgIDIwMTguMjQgXG5cbkNvZWZmaWNpZW50czpcbiAgICAgICAgICAgICBFc3RpbWF0ZSBTdGQuIEVycm9yIHQgdmFsdWUgUHIoPnx0fCkgICAgXG4oSW50ZXJjZXB0KSAgMzY3OC4zODQgICAgNDIxLjc5MSAgIDguNzIxICA8IDJlLTE2ICoqKlxuUGN0RmFtMlBhciAgICAtNDAuODMwICAgICAgNS4wMTggIC04LjEzNiAxLjEzZS0xNCAqKipcbnJhY2VwY3RibGFjayAgIDE2LjQ5OSAgICAgIDIuNzI2ICAgNi4wNTMgNC4yOGUtMDkgKioqXG5yYWNlUGN0SGlzcCAgICAxMy40NzEgICAgICAyLjM4MiAgIDUuNjU2IDMuNjVlLTA4ICoqKlxuUGN0Tm90SFNHcmFkICAtMTMuMDQ2ICAgICAgNC42NDggIC0yLjgwNyAgMC4wMDUzNCAqKiBcbi0tLVxuU2lnbmlmLiBjb2RlczogIDAg4oCYKioq4oCZIDAuMDAxIOKAmCoq4oCZIDAuMDEg4oCYKuKAmSAwLjA1IOKAmC7igJkgMC4xIOKAmCDigJkgMVxuXG5SZXNpZHVhbCBzdGFuZGFyZCBlcnJvcjogNTA1LjUgb24gMjk3IGRlZ3JlZXMgb2YgZnJlZWRvbVxuTXVsdGlwbGUgUi1zcXVhcmVkOiAgMC41OTgsXHRBZGp1c3RlZCBSLXNxdWFyZWQ6ICAwLjU5MjYgXG5GLXN0YXRpc3RpYzogMTEwLjUgb24gNCBhbmQgMjk3IERGLCAgcC12YWx1ZTogPCAyLjJlLTE2XG4ifQ== -->
+<pre><code>
+Call:
+lm(formula = ViolentCrimesPerPop ~ PctFam2Par + racepctblack + 
+    racePctHisp + PctNotHSGrad, data = concat_wo_na)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1618.98  -327.29   -75.27   224.55  2018.24 
+
+Coefficients:
+             Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  3678.384    421.791   8.721  &lt; 2e-16 ***
+PctFam2Par    -40.830      5.018  -8.136 1.13e-14 ***
+racepctblack   16.499      2.726   6.053 4.28e-09 ***
+racePctHisp    13.471      2.382   5.656 3.65e-08 ***
+PctNotHSGrad  -13.046      4.648  -2.807  0.00534 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 505.5 on 297 degrees of freedom
+Multiple R-squared:  0.598, Adjusted R-squared:  0.5926 
+F-statistic: 110.5 on 4 and 297 DF,  p-value: &lt; 2.2e-16</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKVHJ5IGV4ZWN1dGluZyB0aGlzIGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqUnVuKiBidXR0b24gd2l0aGluIHRoZSBjaHVuayBvciBieSBwbGFjaW5nIHlvdXIgY3Vyc29yIGluc2lkZSBpdCBhbmQgcHJlc3NpbmcgKkN0cmwrU2hpZnQrRW50ZXIqLiAKQWRkIGEgbmV3IGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqSW5zZXJ0IENodW5rKiBidXR0b24gb24gdGhlIHRvb2xiYXIgb3IgCgojIFBhY2thZ2VzCl91bmNvbW1lbnQgdGhlIGZpcnN0IGxpbmUgaWYgdGhlIGNodW5rIGRvZXNuJ3QgcnVuXwpgYGB7cn0KI2luc3RhbGwucGFja2FnZXMoImdncGxvdDIiKQpsaWJyYXJ5KHJlYWR4bCkKbGlicmFyeShkcGx5cikKbGlicmFyeShnZ3Bsb3QyKQpgYGAKCiMgU2V0IHlvdXIgd29ya2luZyBkaXJlY3RvcnkKSSB3aWxsIHVzZSBteSBvdXRwdXQgYXMgYW4gZXhhbXBsZSBvZiBob3cgdGhpcyBpcyB1c2VmdWw6CgoxLiBnZXR3ZCgpIHJldHVybnMgeW91ciBjdXJyZW50IHdvcmtpbmcgZGlyZWN0b3J5LCBhc3N1bWVkIHRvIGJlIHdoZXJlIHlvdSB3YW50IHRvIHdvcmsgb24gdGhlIHByb2plY3QuIGkuZSAqIkM6L1VzZXJzL1NhbS9EZXNrdG9wL1JfcHJvamVjdCIqCjIuIHNldHdkKCJDOi9Vc2Vycy9TYW0vRGVza3RvcC9SX3Byb2plY3QiKSBzZXRzIHRoZSB3b3JraW5nIGRpcmVjdG9yeQozLiBOb3cgaW1hZ2luZSBJIGFtIGdlbmVyYXRpbmcgZ3JhcGhzIGFuZCB3YW50IHRvIHNhdmUgdGhlbSB0byBhIHN1YmZvbGRlciB3aXRoaW4gbXkgcHJvamVjdCBmb2xkZXIuIEkgY3JlYXRlIGEgc3ViZm9sZGVyIG5hbWVkIGdyYXBocyBhbmQgdGhlbiB0eXBlIHNldHdkCgojIExvYWQgaW4gdGhlIGRhdGFzZXQKYGBge3J9CmxvYWQoIn4vRGVza3RvcC9NMiAyMDIyLTIwMjMvQWR2YW5jZWQgRWNvbm9tZXRyaWNzL0Fkdi5NZXRyaWNzX1Byb2plY3QtbWFpbi9EYXRhL0NyaW1lRGF0YS5SRGF0YSIpCmBgYAoKIyBWYXJpYWJsZSBvZiBpbnRlcmVzdCBzZWxlY3Rpb24uCldlIHN0YXJ0IGJ5IGtlZXBpbmcgYSB3aWRlIHNlbGVjdGlvbiBvZiBwb3RlbnRpYWwgZXhwbGFuYXRvcnkgdmFyaWFibGVzLiBDaG9pY2Ugb2YgdmFyaWFibGVzIHdhcyBiYXNlZCBvbiBtb2RlbCBzcGVjaWZpY2F0aW9ucyBpbiB0aGUgZXhpc3RpbmcgbGl0ZXJhdHVyZSBhcm91bmQgY3JpbWUuIApgYGB7cn0KdmFyaWFibGVzX2Nob3NlbiA8LSBjKCJjb21tdW5pdHluYW1lOiIsInN0YXRlOiIsInBvcHVsYXRpb246IiwiUG9wRGVuczoiLCJob3VzZWhvbGRzaXplOiIsIlBjdEZhbTJQYXI6IiwicmFjZXBjdGJsYWNrOiIsInJhY2VQY3RIaXNwOiIsImFnZVBjdDE2dDI0OiIsInBlckNhcEluYzoiLCJwY3RXU29jU2VjOiIsInBjdFdJbnZJbmM6IiwiUGN0UG9wVW5kZXJQb3Y6IiwiUGN0Tm90SFNHcmFkOiIsIlBjdEVtcGxveToiLCJQb2xpY1BlclBvcDoiLCJQb2xpY0J1ZGdQZXJQb3A6IiwiVmlvbGVudENyaW1lc1BlclBvcDoiLCJub25WaW9sUGVyUG9wOiIpCmNvbmNhdF9kcm9wcGVkIDwtIGNvbmNhdF90ZXN0W3ZhcmlhYmxlc19jaG9zZW5dCmBgYAoKIyBDbGVhbmluZyB0aGUgZGF0YXRzZXQKYGBge3J9CmlzLmRhdGEuZnJhbWUoY29uY2F0X2Ryb3BwZWQpI3Rlc3QgZGF0YWZyYW1lIG9rCmk9YygzOjE5KSAjU2VsZWN0IHZhcmlhYmxlcyB0byB0dXJuIGludG8gbnVtZXJpYwpjb25jYXRfZHJvcHBlZFsgLCBpXSA8LSBhcHBseShjb25jYXRfZHJvcHBlZFsgLCBpXSwgMiwKICAgICAgICAgICAgICAgICAgICBmdW5jdGlvbih4KSBhcy5udW1lcmljKGFzLmNoYXJhY3Rlcih4KSkpI2NvbnZlcnQgcmVsZXZhbnQgdmFyaWFibGVzIGluIG51bWVyaWMKc2FwcGx5KGNvbmNhdF9kcm9wcGVkLCBjbGFzcykgI2NoZWNrIG9rCmNvbmNhdF93b19uYT0gbmEub21pdChjb25jYXRfZHJvcHBlZCkjRHJvcCBOQQpjb25jYXRfd2lfbmE9Y29uY2F0X2Ryb3BwZWRbIWNvbXBsZXRlLmNhc2VzKGNvbmNhdF9kcm9wcGVkKSxdI2tlZXAgTkEgZm9yIHN0YXRpc3RpY3Mgb24gZHJvcHMKY29sbmFtZXMoY29uY2F0X3dvX25hKTwtZ3N1YigiOiIsIiIsY29sbmFtZXMoY29uY2F0X3dvX25hKSkjIHJlbW92ZSBzZW1pY29sb25zIGZyb20gbmFtZXMKY29sbmFtZXMoY29uY2F0X3dpX25hKTwtZ3N1YigiOiIsIiIsY29sbmFtZXMoY29uY2F0X3dpX25hKSkjIHJlbW92ZSBzZW1pY29sb25zIGZyb20gbmFtZXMKZXhwbGFuYXRvcnlfdmFyaWFibGVzIDwtIGMoInBvcHVsYXRpb24iLCJQb3BEZW5zIiwiaG91c2Vob2xkc2l6ZSIsIlBjdEZhbTJQYXIiLCJyYWNlcGN0YmxhY2siLCJyYWNlUGN0SGlzcCIsImFnZVBjdDE2dDI0IiwicGVyQ2FwSW5jIiwicGN0V1NvY1NlYyIsInBjdFdJbnZJbmMiLCJQY3RQb3BVbmRlclBvdiIsIlBjdE5vdEhTR3JhZCIsIlBjdEVtcGxveSIsIlBvbGljUGVyUG9wIiwiUG9saWNCdWRnUGVyUG9wIikKYGBgCgojIEZpZ3VyaW5nIG91dCB3aGljaCB2YXJpYWJsZXMgdG8ga2VlcC4gV2UgaGF2ZSAxNSBjdXJyZW50bHksIG5lZWQgYXQgbW9zdCAxMCBpbiBteSBvcGluaW9uLiAKRmlyc3Qgc3RlcDogbG9vayBhdCBhIGNvcnJlbGF0aW9uIG1hdHJpeApTZWNvbmQgc3RlcCA6IFZlcnkgYXJiaXRyYXJ5IGFwcHJvYWNoIGJ1dCBnb2luZyB0byBydW4gMiByZWdyZXNzaW9ucy4gT25lIG9uIHRoZSBzYW1wbGUgb2YgMTkxMyBvYnNlcnZhdGlvbnMgYnV0IHdpdGhvdXQgaW5jbHVkaW5nIHBvbGljZSBkYXRhIHZhcmlhYmxlcy4gT25lIHdpdGggMzAyIG9ic2VydmF0aW9ucyB3aXRoIHRoZSBwb2xpY2UgZGF0YS4gVGhleSBzZWUgd2hpY2ggdmFyaWFibGVzIHN0YXkgc2lnbmlmaWNhbnQgYWNjcm9zcyB0aGUgdHdvLCBjaGVjayBjb25zaXN0ZW5jeSBvZiBjb2VmZnMgc2lnbnMsIGV0Yy4gU2hvdWxkIGdpdmUgYSBuaWNlIGZpcnN0IGxvb2suIApgYGB7cn0KIyBDT1JSRUxBVElPTiBUQUJMRVMKY29yciA8LSBjb3IoY29uY2F0X3dpX25hICU+JSBkcGx5cjo6c2VsZWN0KHdoZXJlKGlzLm51bWVyaWMpKSkKY29ycjIgPC0gY29yKGNvbmNhdF93b19uYSAlPiUgZHBseXI6OnNlbGVjdCh3aGVyZShpcy5udW1lcmljKSkpCnJvdW5kKGNvcnIsMikKcm91bmQoY29ycjIsMikKCiMgUkVHUkVTU1RJT05TCmxtX1Zpb2xlbnRfd29fbmEgPSBsbShWaW9sZW50Q3JpbWVzUGVyUG9wfiBQb3BEZW5zICsgaG91c2Vob2xkc2l6ZSArIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIGFnZVBjdDE2dDI0ICsgcGVyQ2FwSW5jICsgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCArIFBjdEVtcGxveSArIFBvbGljUGVyUG9wICsgUG9saWNCdWRnUGVyUG9wLGRhdGEgPSBjb25jYXRfd29fbmEpCgoKbG1fVmlvbGVudF93aV9uYSA9IGxtKFZpb2xlbnRDcmltZXNQZXJQb3B+IFBvcERlbnMgKyBob3VzZWhvbGRzaXplICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIHJhY2VQY3RIaXNwICsgYWdlUGN0MTZ0MjQgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95LGRhdGEgPSBjb25jYXRfd2lfbmEpCgpzdW1tYXJ5KGxtX1Zpb2xlbnRfd29fbmEpCgpzdW1tYXJ5KGxtX1Zpb2xlbnRfd2lfbmEpCmBgYAoqU2lnbmljYW50IGluIHNhbXBsZSB3aXRoIHBvbGljZSBkYXRhKiA6IFBjdEZhbTJQYXIsIHJhY2VwY3RibGFjaywgcmFjZXBjdEhpc3AsIHBjdFdJbnZJbmMsIFBjdE5vdEdyYWRIUywgUGN0RW1wbG95LCBQb2xpY1BlclBvcCwgUG9saWNCdWRnUGVyUG9wCgoqU2lnbmljYW50IGluIHNhbXBsZSB3aXRob3V0IHBvbGljZSBkYXRhKiA6IFBvcERlbnMsIGhvdXNlaG9sZHNpemUsIFBjdEZhbTJQYXIsIHJhY2VwY3RibGFjaywgcmFjZVBjdEhpc3AsIGFnZVBjdDE2dDI0LCBwZXJDYXBJbmMsIHBjdFdJbnZJbmMuIAoKKk92ZXJsYXAqIDogUGN0RmFtMlBBciwgcmFjZXBjdGJsYWNrLCByYWNlcGN0SGlzcCwgcGN0V0ludkluYwoKYGBge3J9CmxtX25vbnZpb2xlbnRfd2lfbmEgPSBsbShub25WaW9sUGVyUG9wfiBwb3B1bGF0aW9uICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIHJhY2VQY3RIaXNwICsgcGVyQ2FwSW5jICsgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCArIFBjdEVtcGxveSxkYXRhID0gY29uY2F0X3dpX25hKQpzdW1tYXJ5KGxtX25vbnZpb2xlbnRfd2lfbmEpCgojIFNpZ25zIGRvbid0IG1ha2Ugc2Vuc2UgOiBQY3ROb3RIU0dyYWQgbmVnYXRpdmUKCmxtX25vbnZpb2xlbnRfd29fbmEgPSBsbShub25WaW9sUGVyUG9wfiBwb3B1bGF0aW9uICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIHJhY2VQY3RIaXNwICsgcGVyQ2FwSW5jICsgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCArIFBjdEVtcGxveStQb2xpY1BlclBvcCArIFBvbGljQnVkZ1BlclBvcCxkYXRhID0gY29uY2F0X3dvX25hKQpzdW1tYXJ5KGxtX25vbnZpb2xlbnRfd29fbmEpCiMgU2lnbnMgdGhhdCBkb24ndCBtYWtlIHNlbnNlIDogUGN0Tm90SFNHcmFkIG5lZ2F0aXZlCiNQZXJoYXBocyBkbyBub3QgdXNlIGJvdGggcG9saWNidWRncGVycG9wIGFuZCBwZXJDYXBJbmMsIHZlcnkgbGlrZWx5IGNvcnJlbGF0ZWQuIAoKIyBDcmVhdGUgYWdncmVnYXRlZCBjcmltZSB2YXJpYWJsZQpjb25jYXRfd2lfbmEkYWdncmVnYXRlZENyaW1lIDwtIGNvbmNhdF93aV9uYSRWaW9sZW50Q3JpbWVzUGVyUG9wICsgY29uY2F0X3dpX25hJG5vblZpb2xQZXJQb3AKY29uY2F0X3dvX25hJGFnZ3JlZ2F0ZWRDcmltZSA8LSBjb25jYXRfd29fbmEkVmlvbGVudENyaW1lc1BlclBvcCArIGNvbmNhdF93b19uYSRub25WaW9sUGVyUG9wCgojIFRlc3QgcmVncmVzc2lvbnMgb24gYWdncmVnYXRlZCBhbmQgdGhlbiBzZXBlcmF0ZSB0byBzZWUgd2hhdCdzIGJpYXNpbmcgY29lZmZpY2llbnRzIHVwL2Rvd24KCmxtX2FnZ3JlZ2F0ZWRfd2lfbmEgPSBsbShhZ2dyZWdhdGVkQ3JpbWV+IFBvcERlbnMgKyBQY3RGYW0yUGFyICsgcmFjZXBjdGJsYWNrICsgcmFjZVBjdEhpc3AgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95LGRhdGEgPSBjb25jYXRfd2lfbmEpCnN1bW1hcnkobG1fYWdncmVnYXRlZF93aV9uYSkKCmxtX2FnZ3JlZ2F0ZWRfd29fbmEgPSBsbShhZ2dyZWdhdGVkQ3JpbWV+IFBvcERlbnMgKyBQY3RGYW0yUGFyICsgcmFjZXBjdGJsYWNrICsgcmFjZVBjdEhpc3AgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95KyBQb2xpY1BlclBvcCArIFBvbGljQnVkZ1BlclBvcCAsZGF0YSA9IGNvbmNhdF93b19uYSkKc3VtbWFyeShsbV9hZ2dyZWdhdGVkX3dvX25hKQpgYGAKKlNpZ25pY2FudCBpbiBzYW1wbGUgd2l0aCBwb2xpY2UgZGF0YSogOiBQY3RGYW0yUGFyLCByYWNlcGN0YmxhY2ssIHJhY2VQY3RIaXNwLCBwZXJDYXBJbmMsIHBjdFdTb2NTZWMsIHBjdFdJbmNJbnYsIFBjdFBvcFVuZGVyUG92LCBQY3ROb3RIU0dyYWQsIFBjdEVtcGxveSwgUG9saWNCdWRnUGVyUG9wLCBQb2xpY0J1ZGdQZXJQb3AuIApTaWducyB0aGF0IGRvbid0IG1ha2Ugc2Vuc2UgOiBwZXJDYXBJbmMgcG9zaXRpdmUsIFBjdE5vdEhTR3JhZCBuZWdhdGl2ZQoKKlNpZ25pY2FudCBpbiBzYW1wbGUgd2l0aG91dCBwb2xpY2UgZGF0YSogOiBwb3B1bGF0aW9uLCBQY3RGYW0yUGFyLCByYWNlcGN0YmxhY2ssIHJhY2VQY3RIaXNwLCBwZXJDYXBJbmMsIHBjdFdTb2NTZWMsIHBjdFdJbnZJbmMsIHBjdFBvcFVuZGVyZlBvdiwgcGN0bm90SFNHcmFkLCBQY3RFbXBsb3kKU2lnbnMgdGhhdCBkb24ndCBtYWtlIHNlbnNlIDogUGVyQ2FwSW5jIHBvc2l0aXZlLCBQY3ROb3RIU0dyYWQgbmVnYXRpdmUsIFBjdEVtcGxveSBwb3NpdGl2ZSwgUG9saWNCdWRnUGVyUG9wIHBvc2l0aXZlLgoKCmBgYHtyfQpsbV9hZ2dyZWdhdGVkX3Rlc3RzID0gbG0oYWdncmVnYXRlZENyaW1lfiBwb3B1bGF0aW9uICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIHJhY2VQY3RIaXNwICsgcGVyQ2FwSW5jICsgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCsgUG9saWNQZXJQb3AgLGRhdGEgPSBjb25jYXRfd29fbmEpCnN1bW1hcnkobG1fYWdncmVnYXRlZF90ZXN0cykKCgpgYGAKIyBNb2RlbCBTZWxlY3Rpb24gdXNpbmcgaW5mb3JtYXRpb24gY3JpdGVyaWEgCmBgYHtyfQpsbV9hZ2dyZWdhdGVkX3dpX25hID0gbG0oYWdncmVnYXRlZENyaW1lfiBQb3BEZW5zICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIHJhY2VQY3RIaXNwICsgcGVyQ2FwSW5jICsgcGN0V1NvY1NlYyArIHBjdFdJbnZJbmMgKyBQY3RQb3BVbmRlclBvdiArIFBjdE5vdEhTR3JhZCArIFBjdEVtcGxveSxkYXRhID0gY29uY2F0X3dpX25hKQoKCmBgYAoKCgoKCgoK</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiUiBOb3RlYm9vayIKb3V0cHV0OiBodG1sX25vdGVib29rCi0tLQoKVHJ5IGV4ZWN1dGluZyB0aGlzIGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqUnVuKiBidXR0b24gd2l0aGluIHRoZSBjaHVuayBvciBieSBwbGFjaW5nIHlvdXIgY3Vyc29yIGluc2lkZSBpdCBhbmQgcHJlc3NpbmcgKkN0cmwrU2hpZnQrRW50ZXIqLiAKQWRkIGEgbmV3IGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqSW5zZXJ0IENodW5rKiBidXR0b24gb24gdGhlIHRvb2xiYXIgb3IgCgojIFBhY2thZ2VzCl91bmNvbW1lbnQgdGhlIGZpcnN0IGxpbmUgaWYgdGhlIGNodW5rIGRvZXNuJ3QgcnVuXwpgYGB7cn0KI2luc3RhbGwucGFja2FnZXMoImdncGxvdDIiKQpsaWJyYXJ5KHJlYWR4bCkKbGlicmFyeShkcGx5cikKbGlicmFyeShnZ3Bsb3QyKQpsaWJyYXJ5KGxlYXBzKQpgYGAKCiMgU2V0IHlvdXIgd29ya2luZyBkaXJlY3RvcnkKSSB3aWxsIHVzZSBteSBvdXRwdXQgYXMgYW4gZXhhbXBsZSBvZiBob3cgdGhpcyBpcyB1c2VmdWw6CgoxLiBnZXR3ZCgpIHJldHVybnMgeW91ciBjdXJyZW50IHdvcmtpbmcgZGlyZWN0b3J5LCBhc3N1bWVkIHRvIGJlIHdoZXJlIHlvdSB3YW50IHRvIHdvcmsgb24gdGhlIHByb2plY3QuIGkuZSAqIkM6L1VzZXJzL1NhbS9EZXNrdG9wL1JfcHJvamVjdCIqCjIuIHNldHdkKCJDOi9Vc2Vycy9TYW0vRGVza3RvcC9SX3Byb2plY3QiKSBzZXRzIHRoZSB3b3JraW5nIGRpcmVjdG9yeQozLiBOb3cgaW1hZ2luZSBJIGFtIGdlbmVyYXRpbmcgZ3JhcGhzIGFuZCB3YW50IHRvIHNhdmUgdGhlbSB0byBhIHN1YmZvbGRlciB3aXRoaW4gbXkgcHJvamVjdCBmb2xkZXIuIEkgY3JlYXRlIGEgc3ViZm9sZGVyIG5hbWVkIGdyYXBocyBhbmQgdGhlbiB0eXBlIHNldHdkCgojIExvYWQgaW4gdGhlIGRhdGFzZXQKYGBge3J9CmxvYWQoIn4vRGVza3RvcC9NMiAyMDIyLTIwMjMvQWR2YW5jZWQgRWNvbm9tZXRyaWNzL0Fkdi5NZXRyaWNzX1Byb2plY3QtbWFpbi9EYXRhL0NyaW1lRGF0YS5SRGF0YSIpCmBgYAoKIyBWYXJpYWJsZSBvZiBpbnRlcmVzdCBzZWxlY3Rpb24uCldlIHN0YXJ0IGJ5IGtlZXBpbmcgYSB3aWRlIHNlbGVjdGlvbiBvZiBwb3RlbnRpYWwgZXhwbGFuYXRvcnkgdmFyaWFibGVzLiBDaG9pY2Ugb2YgdmFyaWFibGVzIHdhcyBiYXNlZCBvbiBtb2RlbCBzcGVjaWZpY2F0aW9ucyBpbiB0aGUgZXhpc3RpbmcgbGl0ZXJhdHVyZSBhcm91bmQgY3JpbWUuIApgYGB7cn0KdmFyaWFibGVzX2Nob3NlbiA8LSBjKCJjb21tdW5pdHluYW1lIiwic3RhdGUiLCJwb3B1bGF0aW9uIiwiUG9wRGVucyIsImhvdXNlaG9sZHNpemUiLCJQY3RGYW0yUGFyIiwicmFjZXBjdGJsYWNrIiwicmFjZVBjdEhpc3AiLCJhZ2VQY3QxNnQyNCIsInBlckNhcEluYyIsInBjdFdTb2NTZWMiLCJwY3RXSW52SW5jIiwiUGN0UG9wVW5kZXJQb3YiLCJQY3ROb3RIU0dyYWQiLCJQY3RFbXBsb3kiLCJQb2xpY1BlclBvcCIsIlBvbGljQnVkZ1BlclBvcCIsIlZpb2xlbnRDcmltZXNQZXJQb3AiLCJub25WaW9sUGVyUG9wIikKY29sbmFtZXMoY29uY2F0X3Rlc3QpPC1nc3ViKCI6IiwiIixjb2xuYW1lcyhjb25jYXRfdGVzdCkpIyByZW1vdmUgc2VtaWNvbG9ucyBmcm9tIG5hbWVzCmNvbmNhdF9kcm9wcGVkIDwtIGNvbmNhdF90ZXN0W3ZhcmlhYmxlc19jaG9zZW5dCmBgYAoKIyBDbGVhbmluZyB0aGUgZGF0YXRzZXQKYGBge3J9CmlzLmRhdGEuZnJhbWUoY29uY2F0X2Ryb3BwZWQpI3Rlc3QgZGF0YWZyYW1lIG9rCmk9YygzOjE5KSAjU2VsZWN0IHZhcmlhYmxlcyB0byB0dXJuIGludG8gbnVtZXJpYwpjb25jYXRfZHJvcHBlZFsgLCBpXSA8LSBhcHBseShjb25jYXRfZHJvcHBlZFsgLCBpXSwgMiwKICAgICAgICAgICAgICAgICAgICBmdW5jdGlvbih4KSBhcy5udW1lcmljKGFzLmNoYXJhY3Rlcih4KSkpI2NvbnZlcnQgcmVsZXZhbnQgdmFyaWFibGVzIGluIG51bWVyaWMKc2FwcGx5KGNvbmNhdF9kcm9wcGVkLCBjbGFzcykgI2NoZWNrIG9rCmNvbmNhdF93b19uYT0gbmEub21pdChjb25jYXRfZHJvcHBlZCkjRHJvcCBOQQpjb25jYXRfd2lfbmE9Y29uY2F0X2Ryb3BwZWRbIWNvbXBsZXRlLmNhc2VzKGNvbmNhdF9kcm9wcGVkKSxdI2tlZXAgTkEgZm9yIHN0YXRpc3RpY3Mgb24gZHJvcHMKZXhwbGFuYXRvcnlfdmFyaWFibGVzIDwtIGMoInBvcHVsYXRpb24iLCJQb3BEZW5zIiwiaG91c2Vob2xkc2l6ZSIsIlBjdEZhbTJQYXIiLCJyYWNlcGN0YmxhY2siLCJyYWNlUGN0SGlzcCIsImFnZVBjdDE2dDI0IiwicGVyQ2FwSW5jIiwicGN0V1NvY1NlYyIsInBjdFdJbnZJbmMiLCJQY3RQb3BVbmRlclBvdiIsIlBjdE5vdEhTR3JhZCIsIlBjdEVtcGxveSIsIlBvbGljUGVyUG9wIiwiUG9saWNCdWRnUGVyUG9wIikKYGBgCgojIEZpZ3VyaW5nIG91dCB3aGljaCB2YXJpYWJsZXMgdG8ga2VlcC4gV2UgaGF2ZSAxNSBjdXJyZW50bHksIG5lZWQgYXQgbW9zdCAxMCBpbiBteSBvcGluaW9uLiAKRmlyc3Qgc3RlcDogbG9vayBhdCBhIGNvcnJlbGF0aW9uIG1hdHJpeApTZWNvbmQgc3RlcCA6IFZlcnkgYXJiaXRyYXJ5IGFwcHJvYWNoIGJ1dCBnb2luZyB0byBydW4gMiByZWdyZXNzaW9ucy4gT25lIG9uIHRoZSBzYW1wbGUgb2YgMTkxMyBvYnNlcnZhdGlvbnMgYnV0IHdpdGhvdXQgaW5jbHVkaW5nIHBvbGljZSBkYXRhIHZhcmlhYmxlcy4gT25lIHdpdGggMzAyIG9ic2VydmF0aW9ucyB3aXRoIHRoZSBwb2xpY2UgZGF0YS4gVGhleSBzZWUgd2hpY2ggdmFyaWFibGVzIHN0YXkgc2lnbmlmaWNhbnQgYWNjcm9zcyB0aGUgdHdvLCBjaGVjayBjb25zaXN0ZW5jeSBvZiBjb2VmZnMgc2lnbnMsIGV0Yy4gU2hvdWxkIGdpdmUgYSBuaWNlIGZpcnN0IGxvb2suIApgYGB7cn0KIyBDT1JSRUxBVElPTiBUQUJMRVMKY29yciA8LSBjb3IoY29uY2F0X3dpX25hICU+JSBkcGx5cjo6c2VsZWN0KHdoZXJlKGlzLm51bWVyaWMpKSkKY29ycjIgPC0gY29yKGNvbmNhdF93b19uYSAlPiUgZHBseXI6OnNlbGVjdCh3aGVyZShpcy5udW1lcmljKSkpCiNyb3VuZChjb3JyLDIpCiNyb3VuZChjb3JyMiwyKQoKIyBSRUdSRVNTVElPTlMKbG1fVmlvbGVudF93b19uYSA9IGxtKFZpb2xlbnRDcmltZXNQZXJQb3B+IFBvcERlbnMgKyBob3VzZWhvbGRzaXplICsgUGN0RmFtMlBhciArIHJhY2VwY3RibGFjayArIHJhY2VQY3RIaXNwICsgYWdlUGN0MTZ0MjQgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95ICsgUG9saWNQZXJQb3AgKyBQb2xpY0J1ZGdQZXJQb3AsZGF0YSA9IGNvbmNhdF93b19uYSkKCgpsbV9WaW9sZW50X3dpX25hID0gbG0oVmlvbGVudENyaW1lc1BlclBvcH4gUG9wRGVucyArIGhvdXNlaG9sZHNpemUgKyBQY3RGYW0yUGFyICsgcmFjZXBjdGJsYWNrICsgcmFjZVBjdEhpc3AgKyBhZ2VQY3QxNnQyNCArIHBlckNhcEluYyArIHBjdFdTb2NTZWMgKyBwY3RXSW52SW5jICsgUGN0UG9wVW5kZXJQb3YgKyBQY3ROb3RIU0dyYWQgKyBQY3RFbXBsb3ksZGF0YSA9IGNvbmNhdF93aV9uYSkKCiNzdW1tYXJ5KGxtX1Zpb2xlbnRfd29fbmEpCgojc3VtbWFyeShsbV9WaW9sZW50X3dpX25hKQpgYGAKKlNpZ25pY2FudCBpbiBzYW1wbGUgd2l0aCBwb2xpY2UgZGF0YSogOiBQY3RGYW0yUGFyLCByYWNlcGN0YmxhY2ssIHJhY2VwY3RIaXNwLCBwY3RXSW52SW5jLCBQY3ROb3RHcmFkSFMsIFBjdEVtcGxveSwgUG9saWNQZXJQb3AsIFBvbGljQnVkZ1BlclBvcAoKKlNpZ25pY2FudCBpbiBzYW1wbGUgd2l0aG91dCBwb2xpY2UgZGF0YSogOiBQb3BEZW5zLCBob3VzZWhvbGRzaXplLCBQY3RGYW0yUGFyLCByYWNlcGN0YmxhY2ssIHJhY2VQY3RIaXNwLCBhZ2VQY3QxNnQyNCwgcGVyQ2FwSW5jLCBwY3RXSW52SW5jLiAKCipPdmVybGFwKiA6IFBjdEZhbTJQQXIsIHJhY2VwY3RibGFjaywgcmFjZXBjdEhpc3AsIHBjdFdJbnZJbmMKCmBgYHtyfQpsbV9ub252aW9sZW50X3dpX25hID0gbG0obm9uVmlvbFBlclBvcH4gcG9wdWxhdGlvbiArIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIHBlckNhcEluYyArIHBjdFdTb2NTZWMgKyBwY3RXSW52SW5jICsgUGN0UG9wVW5kZXJQb3YgKyBQY3ROb3RIU0dyYWQgKyBQY3RFbXBsb3ksZGF0YSA9IGNvbmNhdF93aV9uYSkKc3VtbWFyeShsbV9ub252aW9sZW50X3dpX25hKQoKIyBTaWducyBkb24ndCBtYWtlIHNlbnNlIDogUGN0Tm90SFNHcmFkIG5lZ2F0aXZlCgpsbV9ub252aW9sZW50X3dvX25hID0gbG0obm9uVmlvbFBlclBvcH4gcG9wdWxhdGlvbiArIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIHBlckNhcEluYyArIHBjdFdTb2NTZWMgKyBwY3RXSW52SW5jICsgUGN0UG9wVW5kZXJQb3YgKyBQY3ROb3RIU0dyYWQgKyBQY3RFbXBsb3krUG9saWNQZXJQb3AgKyBQb2xpY0J1ZGdQZXJQb3AsZGF0YSA9IGNvbmNhdF93b19uYSkKI3N1bW1hcnkobG1fbm9udmlvbGVudF93b19uYSkKIyBTaWducyB0aGF0IGRvbid0IG1ha2Ugc2Vuc2UgOiBQY3ROb3RIU0dyYWQgbmVnYXRpdmUKI1BlcmhhcGhzIGRvIG5vdCB1c2UgYm90aCBwb2xpY2J1ZGdwZXJwb3AgYW5kIHBlckNhcEluYywgdmVyeSBsaWtlbHkgY29ycmVsYXRlZC4gCgojIENyZWF0ZSBhZ2dyZWdhdGVkIGNyaW1lIHZhcmlhYmxlCmNvbmNhdF93aV9uYSRhZ2dyZWdhdGVkQ3JpbWUgPC0gY29uY2F0X3dpX25hJFZpb2xlbnRDcmltZXNQZXJQb3AgKyBjb25jYXRfd2lfbmEkbm9uVmlvbFBlclBvcApjb25jYXRfd29fbmEkYWdncmVnYXRlZENyaW1lIDwtIGNvbmNhdF93b19uYSRWaW9sZW50Q3JpbWVzUGVyUG9wICsgY29uY2F0X3dvX25hJG5vblZpb2xQZXJQb3AKCiMgVGVzdCByZWdyZXNzaW9ucyBvbiBhZ2dyZWdhdGVkIGFuZCB0aGVuIHNlcGVyYXRlIHRvIHNlZSB3aGF0J3MgYmlhc2luZyBjb2VmZmljaWVudHMgdXAvZG93bgoKbG1fYWdncmVnYXRlZF93aV9uYSA9IGxtKGFnZ3JlZ2F0ZWRDcmltZX4gUG9wRGVucyArIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIHBlckNhcEluYyArIHBjdFdTb2NTZWMgKyBwY3RXSW52SW5jICsgUGN0UG9wVW5kZXJQb3YgKyBQY3ROb3RIU0dyYWQgKyBQY3RFbXBsb3ksZGF0YSA9IGNvbmNhdF93aV9uYSkKI3N1bW1hcnkobG1fYWdncmVnYXRlZF93aV9uYSkKCmxtX2FnZ3JlZ2F0ZWRfd29fbmEgPSBsbShhZ2dyZWdhdGVkQ3JpbWV+IFBvcERlbnMgKyBQY3RGYW0yUGFyICsgcmFjZXBjdGJsYWNrICsgcmFjZVBjdEhpc3AgKyBwZXJDYXBJbmMgKyBwY3RXU29jU2VjICsgcGN0V0ludkluYyArIFBjdFBvcFVuZGVyUG92ICsgUGN0Tm90SFNHcmFkICsgUGN0RW1wbG95KyBQb2xpY1BlclBvcCArIFBvbGljQnVkZ1BlclBvcCAsZGF0YSA9IGNvbmNhdF93b19uYSkKI3N1bW1hcnkobG1fYWdncmVnYXRlZF93b19uYSkKYGBgCipTaWduaWNhbnQgaW4gc2FtcGxlIHdpdGggcG9saWNlIGRhdGEqIDogUGN0RmFtMlBhciwgcmFjZXBjdGJsYWNrLCByYWNlUGN0SGlzcCwgcGVyQ2FwSW5jLCBwY3RXU29jU2VjLCBwY3RXSW5jSW52LCBQY3RQb3BVbmRlclBvdiwgUGN0Tm90SFNHcmFkLCBQY3RFbXBsb3ksIFBvbGljQnVkZ1BlclBvcCwgUG9saWNCdWRnUGVyUG9wLiAKU2lnbnMgdGhhdCBkb24ndCBtYWtlIHNlbnNlIDogcGVyQ2FwSW5jIHBvc2l0aXZlLCBQY3ROb3RIU0dyYWQgbmVnYXRpdmUKCipTaWduaWNhbnQgaW4gc2FtcGxlIHdpdGhvdXQgcG9saWNlIGRhdGEqIDogcG9wdWxhdGlvbiwgUGN0RmFtMlBhciwgcmFjZXBjdGJsYWNrLCByYWNlUGN0SGlzcCwgcGVyQ2FwSW5jLCBwY3RXU29jU2VjLCBwY3RXSW52SW5jLCBwY3RQb3BVbmRlcmZQb3YsIHBjdG5vdEhTR3JhZCwgUGN0RW1wbG95ClNpZ25zIHRoYXQgZG9uJ3QgbWFrZSBzZW5zZSA6IFBlckNhcEluYyBwb3NpdGl2ZSwgUGN0Tm90SFNHcmFkIG5lZ2F0aXZlLCBQY3RFbXBsb3kgcG9zaXRpdmUsIFBvbGljQnVkZ1BlclBvcCBwb3NpdGl2ZS4KCgpgYGB7cn0KbG1fYWdncmVnYXRlZF90ZXN0cyA9IGxtKGFnZ3JlZ2F0ZWRDcmltZX4gcG9wdWxhdGlvbiArIFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIHBlckNhcEluYyArIHBjdFdTb2NTZWMgKyBwY3RXSW52SW5jICsgUGN0UG9wVW5kZXJQb3YgKyBQY3ROb3RIU0dyYWQrIFBvbGljUGVyUG9wICxkYXRhID0gY29uY2F0X3dvX25hKQojc3VtbWFyeShsbV9hZ2dyZWdhdGVkX3Rlc3RzKQoKCmBgYAojIE1vZGVsIFNlbGVjdGlvbiB1c2luZyBpbmZvcm1hdGlvbiBjcml0ZXJpYSAKYGBge3J9CmRyb3BwZXJzIDwtIGMoImNvbW11bml0eW5hbWUiLCAic3RhdGUiLCAibm9uVmlvbFBlclBvcCIsICJhZ2dyZWdhdGVkQ3JpbWUiKQpzdWJzX3NhbXBsZSA8LSBzZWxlY3QoY29uY2F0X3dvX25hLC1hbGxfb2YoZHJvcHBlcnMpKQpzdWJzIDwtIHJlZ3N1YnNldHMoVmlvbGVudENyaW1lc1BlclBvcH4uLCBkYXRhID0gc3Vic19zYW1wbGUsIG52bWF4ID0gNywgbWV0aG9kID0gImZvcndhcmQiKQpzdW1tYXJ5KHN1YnMpCgpzdWJzLnN1bSA8LSBzdW1tYXJ5KHN1YnMpCmRhdGEuZnJhbWUoCiAgQWRqLlIyID0gd2hpY2gubWF4KHN1YnMuc3VtJGFkanIyKSwKICBDUCA9IHdoaWNoLm1pbihzdWJzLnN1bSRjcCksCiAgQklDID0gd2hpY2gubWluKHN1YnMuc3VtJGJpYykKKQoKYGBgCgpgYGB7cn0KZnJvbV9zdWJzIDwtIGxtKFZpb2xlbnRDcmltZXNQZXJQb3B+IFBjdEZhbTJQYXIgKyByYWNlcGN0YmxhY2sgKyByYWNlUGN0SGlzcCArIFBjdE5vdEhTR3JhZCAsZGF0YSA9IGNvbmNhdF93b19uYSkKc3VtbWFyeShmcm9tX3N1YnMpCmBgYAoKCgoKCgo=</div>
 
 
 

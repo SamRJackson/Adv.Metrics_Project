@@ -13,6 +13,7 @@ _uncomment the first line if the chunk doesn't run_
 library(readxl)
 library(dplyr)
 library(ggplot2)
+library(leaps)
 ```
 
 # Set your working directory
@@ -30,7 +31,8 @@ load("~/Desktop/M2 2022-2023/Advanced Econometrics/Adv.Metrics_Project-main/Data
 # Variable of interest selection.
 We start by keeping a wide selection of potential explanatory variables. Choice of variables was based on model specifications in the existing literature around crime. 
 ```{r}
-variables_chosen <- c("communityname:","state:","population:","PopDens:","householdsize:","PctFam2Par:","racepctblack:","racePctHisp:","agePct16t24:","perCapInc:","pctWSocSec:","pctWInvInc:","PctPopUnderPov:","PctNotHSGrad:","PctEmploy:","PolicPerPop:","PolicBudgPerPop:","ViolentCrimesPerPop:","nonViolPerPop:")
+variables_chosen <- c("communityname","state","population","PopDens","householdsize","PctFam2Par","racepctblack","racePctHisp","agePct16t24","perCapInc","pctWSocSec","pctWInvInc","PctPopUnderPov","PctNotHSGrad","PctEmploy","PolicPerPop","PolicBudgPerPop","ViolentCrimesPerPop","nonViolPerPop")
+colnames(concat_test)<-gsub(":","",colnames(concat_test))# remove semicolons from names
 concat_dropped <- concat_test[variables_chosen]
 ```
 
@@ -43,8 +45,6 @@ concat_dropped[ , i] <- apply(concat_dropped[ , i], 2,
 sapply(concat_dropped, class) #check ok
 concat_wo_na= na.omit(concat_dropped)#Drop NA
 concat_wi_na=concat_dropped[!complete.cases(concat_dropped),]#keep NA for statistics on drops
-colnames(concat_wo_na)<-gsub(":","",colnames(concat_wo_na))# remove semicolons from names
-colnames(concat_wi_na)<-gsub(":","",colnames(concat_wi_na))# remove semicolons from names
 explanatory_variables <- c("population","PopDens","householdsize","PctFam2Par","racepctblack","racePctHisp","agePct16t24","perCapInc","pctWSocSec","pctWInvInc","PctPopUnderPov","PctNotHSGrad","PctEmploy","PolicPerPop","PolicBudgPerPop")
 ```
 
@@ -55,8 +55,8 @@ Second step : Very arbitrary approach but going to run 2 regressions. One on the
 # CORRELATION TABLES
 corr <- cor(concat_wi_na %>% dplyr::select(where(is.numeric)))
 corr2 <- cor(concat_wo_na %>% dplyr::select(where(is.numeric)))
-round(corr,2)
-round(corr2,2)
+#round(corr,2)
+#round(corr2,2)
 
 # REGRESSTIONS
 lm_Violent_wo_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy + PolicPerPop + PolicBudgPerPop,data = concat_wo_na)
@@ -64,9 +64,9 @@ lm_Violent_wo_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par 
 
 lm_Violent_wi_na = lm(ViolentCrimesPerPop~ PopDens + householdsize + PctFam2Par + racepctblack + racePctHisp + agePct16t24 + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wi_na)
 
-summary(lm_Violent_wo_na)
+#summary(lm_Violent_wo_na)
 
-summary(lm_Violent_wi_na)
+#summary(lm_Violent_wi_na)
 ```
 *Signicant in sample with police data* : PctFam2Par, racepctblack, racepctHisp, pctWInvInc, PctNotGradHS, PctEmploy, PolicPerPop, PolicBudgPerPop
 
@@ -81,7 +81,7 @@ summary(lm_nonviolent_wi_na)
 # Signs don't make sense : PctNotHSGrad negative
 
 lm_nonviolent_wo_na = lm(nonViolPerPop~ population + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy+PolicPerPop + PolicBudgPerPop,data = concat_wo_na)
-summary(lm_nonviolent_wo_na)
+#summary(lm_nonviolent_wo_na)
 # Signs that don't make sense : PctNotHSGrad negative
 #Perhaphs do not use both policbudgperpop and perCapInc, very likely correlated. 
 
@@ -92,10 +92,10 @@ concat_wo_na$aggregatedCrime <- concat_wo_na$ViolentCrimesPerPop + concat_wo_na$
 # Test regressions on aggregated and then seperate to see what's biasing coefficients up/down
 
 lm_aggregated_wi_na = lm(aggregatedCrime~ PopDens + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wi_na)
-summary(lm_aggregated_wi_na)
+#summary(lm_aggregated_wi_na)
 
 lm_aggregated_wo_na = lm(aggregatedCrime~ PopDens + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy+ PolicPerPop + PolicBudgPerPop ,data = concat_wo_na)
-summary(lm_aggregated_wo_na)
+#summary(lm_aggregated_wo_na)
 ```
 *Signicant in sample with police data* : PctFam2Par, racepctblack, racePctHisp, perCapInc, pctWSocSec, pctWIncInv, PctPopUnderPov, PctNotHSGrad, PctEmploy, PolicBudgPerPop, PolicBudgPerPop. 
 Signs that don't make sense : perCapInc positive, PctNotHSGrad negative
@@ -106,17 +106,30 @@ Signs that don't make sense : PerCapInc positive, PctNotHSGrad negative, PctEmpl
 
 ```{r}
 lm_aggregated_tests = lm(aggregatedCrime~ population + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad+ PolicPerPop ,data = concat_wo_na)
-summary(lm_aggregated_tests)
+#summary(lm_aggregated_tests)
 
 
 ```
 # Model Selection using information criteria 
 ```{r}
-lm_aggregated_wi_na = lm(aggregatedCrime~ PopDens + PctFam2Par + racepctblack + racePctHisp + perCapInc + pctWSocSec + pctWInvInc + PctPopUnderPov + PctNotHSGrad + PctEmploy,data = concat_wi_na)
+droppers <- c("communityname", "state", "nonViolPerPop", "aggregatedCrime")
+subs_sample <- select(concat_wo_na,-all_of(droppers))
+subs <- regsubsets(ViolentCrimesPerPop~., data = subs_sample, nvmax = 7, method = "forward")
+summary(subs)
 
+subs.sum <- summary(subs)
+data.frame(
+  Adj.R2 = which.max(subs.sum$adjr2),
+  CP = which.min(subs.sum$cp),
+  BIC = which.min(subs.sum$bic)
+)
 
 ```
 
+```{r}
+from_subs <- lm(ViolentCrimesPerPop~ PctFam2Par + racepctblack + racePctHisp + PctNotHSGrad ,data = concat_wo_na)
+summary(from_subs)
+```
 
 
 
