@@ -6,22 +6,18 @@ output: html_notebook
 # Packages.
 _uncomment the first line if the chunk doesn't run_
 ```{r}
-#install.packages("leaps")
+#install.package("leaps")
 #install.packages("ggplot2")
 #install.packages("dplyr")
-#install.packages("stargazer") #To get summary stat on Latex
-#install.packags("mgcv") #To run the Gam 
-library(stargazer)
 library(readxl)
 library(dplyr)
 library(ggplot2)
 library(leaps)
-library(mgcv)
 ```
 
 # Loading in the dataset.
 ```{r}
-load("/Users/mathis/SFR Cloud/AMSE/Master 2 -ETE-/Advanced_econometrics/Project/dataCrime.RData")
+load("C:/Users/Sam/Desktop/Adv.Metrics_Project-main/Data/CrimeData.RData")
 ```
 
 # Variable of interest selection.
@@ -64,60 +60,51 @@ final_variables= c("communityname","state","PopDens","householdsize","PctFam2Par
 dataset=concat_wo_na[final_variables]
 is.data.frame(dataset)#test dataframe ok
 ```
-# Summary Statistics
 ```{r}
-stargazer(as.data.frame(dataset))
+library(MASS)
+library(randomForest)
+library(gbm)
+library(glmnet)
+dataset <- dataset[-communityname,state]
+data(dataset) ; nobs = nrow(dataset)
+set.seed(12345) ; nfold = 10
+Kfold=cut(seq(1,nobs),breaks=nfold,labels=FALSE)
+mse.test = matrix(0,nfold,4)
+
+Xcol = colnames(dataset)[-12]
+Xsqr = paste0("I(",Xcol,"^2)",collapse = "+")
+Xcub = paste0("I(",Xcol,"^3)",collapse = "+")
+
+fmla = paste0("crimes~(.)^2+", Xsqr,"+",Xcub)
+
+X = model.matrix(as.formula(fmla),data = dataset)[,-1]
+y = dataset[,12]
+
+mysample = sample(1:nobs)
+for (i in 1:nfold){
+  cat("K-fold loop: ",i,"\r")
+  test = mysample[which(Kfold == i)]
+  train = mysample[which(Kfold != i)]
+  
+  fit.lm <- lm(crimes~.,data = dataset,subset=train)
+  fit.la <- cv.glmnet(X[train,],y[train],alpha = 1)
+  fit.rf <- randomForest(crimes~.,data = dataset, subset = train, mtry = 6)
+  fit.bo <- gbm(crimes~.,data = dataset[train,],distribtuon = "gaussian",interaction.depth = 6)
+  
+  mse.test[i,1] = mean((dataset$crimes -predict(fit.lm,dataset))[-train]^2)
+  mse.test[i,2] = mean((y -predict(fit.la,X,s = "lambda.min"))[-train]^2)
+  mse.test[i,3] = mean((dataset$crimes -predict(fit.rf,dataset))[-train]^2)
+  mse.test[i,4] = mean((dataset$crimes -predict(fit.bo,dataset))[-train]^2)
+  
+
+}
+mse = colMeans(mse.test)
+round(mse,digits = 2)
+
+
 ```
 
 
-# Gam Model 
-
-Here is the raw version of the Gam model
-```{r}
-attach(dataset)
-
-Gam <- gam((crimes~s(PopDens)+s(householdsize)+s(PctFam2Par)+s(racepctblack)+s(racePctHisp)+s(agePct16t24)+s(PctPopUnderPov)+s(PctNotHSGrad)+s(PctUnemployed))) 
-
-summary(Gam)
-```
-
-Now we can analyze the graphs 
-
-```{r}
-plot(Gam, select=1, shade=T, shade.col="lightblue", rug=T, ylim=c(-5000,1000))
-```
-
-```{r}
-plot(Gam, select=2, shade=T, shade.col="lightblue", rug=T, ylim=c(-1000,7000))
-```
-
-```{r}
-plot(Gam, select=3, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,15000))
-```
-
-```{r}
-plot(Gam, select=4, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
-```
-
-```{r}
-plot(Gam, select=5, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,8000))
-```
-
-```{r}
-plot(Gam, select=6, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
-```
-
-```{r}
-plot(Gam, select=7, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000) )
-```
-
-```{r}
-plot(Gam, select=8, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
-```
-
-```{r}
-plot(Gam, select=9, shade=T, shade.col="lightblue", rug=T, ylim=c(-5000,500))
-```
 
 
 
