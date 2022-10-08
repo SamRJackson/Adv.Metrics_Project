@@ -11,18 +11,22 @@ _uncomment the first line if the chunk doesn't run_
 #install.packages("dplyr")
 #install.packages("stargazer") #To get summary stat on Latex
 #install.packags("mgcv") #To run the Gam 
+#install.packages("itsadug") To export Gam on Latex
+
 library(stargazer)
 library(readxl)
 library(dplyr)
 library(ggplot2)
 library(leaps)
 library(mgcv)
+library(gamtabs) 
 ```
 
 # Loading in the dataset.
 ```{r}
 load("/Users/mathis/SFR Cloud/AMSE/Master 2 -ETE-/Advanced_econometrics/Project/dataCrime.RData")
 ```
+
 
 # Variable of interest selection.
 We start by keeping a wide selection of potential explanatory variables. Choice of variables was based on model specifications in the existing literature around crime. 
@@ -77,6 +81,7 @@ Here is the raw version of the Gam model
 attach(dataset)
 
 Gam <- gam((crimes~s(PopDens)+s(householdsize)+s(PctFam2Par)+s(racepctblack)+s(racePctHisp)+s(agePct16t24)+s(PctPopUnderPov)+s(PctNotHSGrad)+s(PctUnemployed))) 
+gamtabs(Gam) 
 
 summary(Gam)
 ```
@@ -103,6 +108,7 @@ For the second GAM, I will simply adjust the smoothing of the functions in order
 
 ```{r}
 Gam2 <- gam((crimes~s(PopDens,sp=0.01)+s(householdsize)+s(PctFam2Par)+s(racepctblack)+s(racePctHisp)+s(agePct16t24)+s(PctPopUnderPov)+s(PctNotHSGrad)+s(PctUnemployed, sp=0.05)),method="REML")
+gamtabs(Gam2) 
 summary(Gam2)
 
 plot(Gam2, select=1, shade=T, shade.col="lightblue", xlim=c(0,20000), ylim=c(-5000,1000))
@@ -127,6 +133,8 @@ We then take into account these three points for a third GAM model
 ```{r}
 Gam3 <- gam((crimes~s(PopDens)+s(racepctblack)+s(PctPopUnderPov)+s(PctNotHSGrad)+s(agePct16t24,sp=1)+PctUnemployed+racePctHisp+s(PctFam2Par,householdsize)), method="REML")
 summary(Gam3)
+gamtabs(Gam3) 
+
 
 par(mfrow=c(2,3))
 plot(Gam3, select=1, shade=T, shade.col="lightblue", xlim=c(0,20000), ylim=c(-5000,1000))
