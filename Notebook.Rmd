@@ -81,46 +81,89 @@ Gam <- gam((crimes~s(PopDens)+s(householdsize)+s(PctFam2Par)+s(racepctblack)+s(r
 summary(Gam)
 ```
 
-Now we can analyze the graphs 
+According to the results of the tests on the variables in this first model, all variables have a non-linear effect. 
+
+Now we can analyze the graphs. 
 
 ```{r}
+par(mfrow=c(3,3)) #TO have the 3 graphs side by side
 plot(Gam, select=1, shade=T, shade.col="lightblue", rug=T, ylim=c(-5000,1000))
-```
-
-```{r}
 plot(Gam, select=2, shade=T, shade.col="lightblue", rug=T, ylim=c(-1000,7000))
-```
-
-```{r}
 plot(Gam, select=3, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,15000))
-```
-
-```{r}
 plot(Gam, select=4, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
-```
-
-```{r}
 plot(Gam, select=5, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,8000))
-```
-
-```{r}
 plot(Gam, select=6, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
-```
-
-```{r}
 plot(Gam, select=7, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000) )
-```
-
-```{r}
 plot(Gam, select=8, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
-```
-
-```{r}
 plot(Gam, select=9, shade=T, shade.col="lightblue", rug=T, ylim=c(-5000,500))
 ```
 
 
+For the second GAM, I will simply adjust the smoothing of the functions in order to find the right balance between flexibility and interpretation power. For this, I use the restricted maximum likelihood method that selects automatically the smoothing parameter. For some variables, for which the smoothing is too important, I set this parameter manually. I did not change the number of basis used, as they seem to be already well set up
 
+```{r}
+Gam2 <- gam((crimes~s(PopDens,sp=0.01)+s(householdsize)+s(PctFam2Par)+s(racepctblack)+s(racePctHisp)+s(agePct16t24)+s(PctPopUnderPov)+s(PctNotHSGrad)+s(PctUnemployed, sp=0.05)),method="REML")
+summary(Gam2)
+
+plot(Gam2, select=1, shade=T, shade.col="lightblue", xlim=c(0,20000), ylim=c(-5000,1000))
+plot(Gam2, select=2, shade=T, shade.col="lightblue", rug=T, ylim=c(-1000,7000))
+plot(Gam2, select=3, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,15000))
+plot(Gam2, select=4, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
+plot(Gam2, select=5, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,8000))
+plot(Gam2, select=6, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
+plot(Gam2, select=7, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
+plot(Gam2, select=8, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
+plot(Gam2, select=9, shade=T, shade.col="lightblue", rug=T, ylim=c(-5000,500)) 
+```
+
+With the help of the tests and the graphs, the following conclusions can be drawn: 
+1) If we observe unemployment with a weaker smoothing parameter, the variable seems non-linear overall. However, it still shows some linearity over the vast majority of observations. 
+2) The percentage of the population that is hisapnic seems to act linearly. 
+3) With reducing the smooth parameter on the population density function, it capture better the quadratic effect for the low value, but it increases strongly the variance for the higer value. So we will keep the smoothing parameter of the restricted maximum likelihood method. 
+
+Also, one could think that the percentage of people with two parents and household size are related. 
+
+We then take into account these three points for a third GAM model
+```{r}
+Gam3 <- gam((crimes~s(PopDens)+s(racepctblack)+s(PctPopUnderPov)+s(PctNotHSGrad)+s(agePct16t24,sp=1)+PctUnemployed+racePctHisp+s(PctFam2Par,householdsize)), method="REML")
+summary(Gam3)
+
+par(mfrow=c(2,3))
+plot(Gam3, select=1, shade=T, shade.col="lightblue", xlim=c(0,20000), ylim=c(-5000,1000))
+plot(Gam3, select=2, shade=T, shade.col="lightblue", rug=T, ylim=c(-3000,4000))
+plot(Gam3, select=3, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,15000))
+plot(Gam3, select=4, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
+plot(Gam3, select=5, shade=T, shade.col="lightblue", rug=T, ylim=c(-2000,2000))
+plot(Gam3, select=6, shade=T, shade.col="lightblue", rug=T, ylim=c(1,5))
+```
+
+
+```{r}
+par(mfrow=c(2,1))
+vis.gam(Gam2, view=c("PctNotHSGrad","agePct16t24"), phi=30, theta=60)
+vis.gam(Gam3, view=c("PctNotHSGrad","agePct16t24"), phi=30, theta=60)
+```
+
+Note that here we manually set a weaker smoothing term than the one imposed by default, which represented the impact of age as perfectly linear, which is not consistent with the test performed for this model.
+
+# Model checking
+
+```{r}
+par(mfrow=c(2,2))
+gam.check(Gam3)
+```
+
+Here, it reports full convergence. R has found a best solution.
+Based on these results, the number of default bases set for each variable appears to be appropriate. 
+Tests indicates that residuals are not randomly distributed.
+Globalement, les résidus semblent suivrent une distribution normale et centrée sur zéro, mais avec de forts écarts pour des valeurs extrêmes.
+
+
+# Concurvity 
+```{r}
+concurvity(Gam3, full = T)
+concurvity(Gam3, full = F)
+```
 
 
 
