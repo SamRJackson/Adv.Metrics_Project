@@ -148,8 +148,8 @@ plot(Gam3, select=6, shade=T, shade.col="lightblue", rug=T, ylim=c(1,5))
 
 ```{r}
 par(mfrow=c(2,1))
-vis.gam(Gam2, view=c("PctNotHSGrad","agePct16t24"), phi=30, theta=60)
-vis.gam(Gam3, view=c("PctNotHSGrad","agePct16t24"), phi=30, theta=60)
+vis.gam(Gam2, view=c("PctFam2Par","householdsize"), phi=30, theta=40)
+vis.gam(Gam3, view=c("PctFam2Par","householdsize"), phi=30, theta=40)
 ```
 
 Note that here we manually set a weaker smoothing term than the one imposed by default, which represented the impact of age as perfectly linear, which is not consistent with the test performed for this model.
