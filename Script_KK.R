@@ -2,6 +2,13 @@ library(readxl)
 library(dplyr)
 library(ggplot2)
 library(leaps)
+library(MASS)
+library(corrplot)
+library(vtable)
+library(outliers)
+library(texreg)
+library(estimatr)
+
 #1. Database preparation
 
 #1.1 Selection of variables
@@ -39,56 +46,31 @@ final_variables= c("communityname","state","PopDens","householdsize","PctFam2Par
 dataset=concat_wo_na[final_variables]
 is.data.frame(dataset)#test dataframe ok
 
+#2. Descriptive statistics
 
-#2. Linear regression
+#Summary statistics
 
-lm_crimes = lm(nonViolPerPop~ population+PopDens+ PctFam2Par + racepctblack + racePctHisp + agePct65up+ agePct16t24 +perCapInc+ pctWInvInc + PctPopUnderPov + PctBSorMore+ PctUnemployed,data = concat_wo_na)
+st(dataset,digits = 2,out="latex")
+
+#we checked the minimum and maximum 
+
+#Correlation matrix
+correlation=cor(dataset[,c(3:12)])
+col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
+corrplot(correlation, method="color", col=col(200),  
+         type="upper", order="hclust", 
+         addCoef.col = "black", # Add coefficient of correlation
+         tl.col="black", tl.srt=45, #Text label color and rotation
+         # hide correlation coefficient on the principal diagonal
+         diag=FALSE 
+)
+
+#3. Parametric section - regression
+
+lm_crimes = lm(crimes~ PopDens+householdsize+PctFam2Par+racepctblack+racePctHisp+agePct16t24+PctPopUnderPov+PctNotHSGrad+PctUnemployed,data = dataset)
+rlm_crimes = lm_robust(crimes~ PopDens+householdsize+PctFam2Par+racepctblack+racePctHisp+agePct16t24+PctPopUnderPov+PctNotHSGrad+PctUnemployed,data = dataset, se_type="stata")
 summary(lm_crimes)
+summary(rlm_crimes)
 
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#1.2.2 outliers?
-
-summary(concat_wo_na)#might be some problems on population and popDens
-
-#Boxplots
-
-pct_var <- c("PctFam2Par:","racepctblack:","racePctHisp:","agePct16t24:","pctWSocSec:","pctWInvInc:","PctPopUnderPov:","PctNotHSGrad:","PctEmploy:")
-boxplot(concat_wo_na[pct_var])#seems ok
-
-
-#Histograms for variables
-hist(concat_wo_na$`population:`,breaks=c(200))
-hist(concat_dropped$`population:`,breaks=c(2000))
-concat_wo_na=concat_wo_na[order(concat_wo_na$population, decreasing = TRUE), ]
-
-cor(concat_wo_na[,c(3:17)])
+texreg(rlm_crimes)#Latex format
+texreg(lm_crimes)
